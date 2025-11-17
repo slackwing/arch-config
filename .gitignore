@@ -1,0 +1,11 @@
+/*
+!.gitignore
+!nvim/
+!alacritty/
+!keyd/
+!waybar/
+!fontconfig/
+!hypr/
+!nvim/
+!tmux/
+tmux/plugins/
