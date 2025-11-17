@@ -1,0 +1,35 @@
+alias hc='nvim ~/.config/hypr/hyprland.conf'
+alias hcd='cd ~/.config/hypr/'
+alias myrc='nvim ~/.myrc2 ; source ~/.myrc2'
+alias keyc='sudo nvim /etc/keyd/default.conf'
+alias keycd='cd /etc/keyd/'
+alias keyr='sudo systemctl restart keyd'
+alias catkeyc='cat /etc/keyd/default.conf'
+alias logout='hyprctl dispatch exit'
+alias waycd='cd ~/.config/waybar'
+alias wayr='pkill waybar; nohup waybar >/dev/null 2>&1 &'
+alias audiols='pactl list short sinks'
+alias audiocd='pactl set-default-sink'
+alias hf='hyprpm enable hyprfocus && hyprpm reload -n'
+alias algocd='cd /home/slackwing/src/darkfeather/0g.algo-celes'
+alias myrc2='nvim /home/slackwing/src/feathers/tooling/snapshots/.myrc'
+alias mkv2webm='ffmpeg -i recording.mkv -c:v libvpx-vp9 -pix_fmt yuv420p -c:a libopus -b:a 128k out.webm'
+alias nv='nvim'
+alias nvc='nvim ~/.config/nvim/'
+alias nvcd='cd ~/.config/nvim/'
+alias tmuxc='nvim ~/.config/tmux/tmux.conf'
+alias tmuxcd='cd ~/.config/tmux'
+
+
+
+
+# git
+
+alias gdrop='git checkout --'                    # as opposed to stashing; supply argument "." for all or specific files
+alias guncommit='git reset --soft HEAD~1'
+alias gunstage='git restore --staged .'          # undo all added to stage (preserve)
+gb() {
+    # https://stackoverflow.com/a/44529712/925913
+    git for-each-ref --sort=-committerdate refs/heads --format='%(authordate:short) %(color:red)%(objectname:short) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committerdate:relative)%(color:reset))' | head -n 10
+}
+
