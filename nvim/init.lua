@@ -15,7 +15,7 @@ rtp:prepend(lazypath)
 
 require('lazy').setup {
   require 'plugins.neotree',
-  require 'plugins.colortheme',
+  -- require 'plugins.colortheme',
   require 'plugins.lualine',
   require 'plugins.treesitter',
   require 'plugins.telescope',
@@ -25,4 +25,5 @@ require('lazy').setup {
   require 'plugins.gitsigns',
   require 'plugins.indent-blankline',
   require 'plugins.misc',
+  require 'plugins.diffview',
 }
