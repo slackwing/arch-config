@@ -26,9 +26,21 @@ require('lazy').setup {
   require 'plugins.indent-blankline',
   require 'plugins.misc',
   require 'plugins.diffview',
+  require 'plugins.mini',
 }
 
 vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
 vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
 vim.api.nvim_set_hl(0, 'SignColumn', { bg = 'none' })
 vim.api.nvim_set_hl(0, 'EndOfBuffer', { bg = 'none' })
+
+-- mini.diff mappings
+vim.keymap.set('n', ';a', function()
+  vim.cmd 'normal ghgh'
+end, { desc = 'MiniDiff: apply hunk under cursor' })
+vim.keymap.set('n', ';r', function()
+  vim.cmd 'normal gHgh'
+end, { desc = 'MiniDiff: reset hunk under cursor' })
+vim.keymap.set('n', ';d', function()
+  MiniDiff.toggle_overlay()
+end)
