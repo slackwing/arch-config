@@ -12,3 +12,10 @@ save_to_clipboard = true
 
 [window]
 opacity = 0.85
+
+[colors]
+transparent_background_colors = true
+
+[colors.primary]
+background = "#0A0A00"
+

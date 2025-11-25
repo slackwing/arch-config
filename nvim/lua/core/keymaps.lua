@@ -6,7 +6,16 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 local opts = { noremap = true, silent = true }
 
 -- delete without copying into register
-vim.keymap.set('n', 'x', '"_x', opts)
+vim.keymap.set('n', 'd', '"_d')
+vim.keymap.set('n', 'dd', '"_dd')
+vim.keymap.set('n', 'D', '"_D')
+vim.keymap.set('x', 'd', '"_d')
+vim.keymap.set('x', 'D', '"_D')
+vim.keymap.set('n', 'x', '"_x')
+vim.keymap.set('x', 'x', '"_x')
+
+-- use 'cc' (cut) for original 'dd' behavior
+vim.keymap.set('n', 'cc', '"+dd')
 
 -- keep last yanked when pasting
 vim.keymap.set('v', 'p', '"_dP', opts)

@@ -19,6 +19,11 @@ alias nvc='nvim ~/.config/nvim/'
 alias nvcd='cd ~/.config/nvim/'
 alias tmuxc='nvim ~/.config/tmux/tmux.conf'
 alias tmuxcd='cd ~/.config/tmux'
+alias wifils='nmcli device wifi list'
+wificd() {
+  nmcli device wifi connect $1 password $2
+}
+alias wallpaper='pkill hyprpaper ; hyprpaper & ; disown'
 
 
 
