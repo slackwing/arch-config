@@ -4,8 +4,16 @@ return {
   config = function()
     require('onedark').setup {
       style = 'warmer',
-      transparent = true
+      transparent = true,  -- Let onedark handle transparency for most elements
+      code_style = {
+        comments = 'italic',
+        keywords = 'bold',
+        functions = 'bold',
+        strings = 'none',
+        variables = 'none'
+      }
     }
+    -- Step 2: Apply onedark colors (init.lua will override Normal/NormalNC after)
     require('onedark').load()
   end
 }

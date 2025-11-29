@@ -21,7 +21,7 @@ rtp:prepend(lazypath)
 
 require('lazy').setup {
   require 'plugins.neotree',
-  -- require 'plugins.colortheme',
+  require 'plugins.colortheme',
   require 'plugins.lualine',
   require 'plugins.treesitter',
   require 'plugins.telescope',
@@ -36,7 +36,7 @@ require('lazy').setup {
   require 'plugins.sxiva',
 }
 
-vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+-- Set transparency for floating windows, signs, etc
 vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
 vim.api.nvim_set_hl(0, 'SignColumn', { bg = 'none' })
 vim.api.nvim_set_hl(0, 'EndOfBuffer', { bg = 'none' })

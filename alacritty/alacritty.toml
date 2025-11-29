@@ -1,8 +1,8 @@
 [font]
-normal = { family = "MesloLGS NF", style = "Regular" }
-bold = { family = "MesloLGS NF", style = "Bold" }
-italic = { family = "MesloLGS NF", style = "Italic" }
-bold_italic = { family = "MesloLGS NF", style = "Bold Italic" }
+normal = { family = "JetBrains Mono SemiBold" }
+bold = { family = "JetBrains Mono ExtraBold" }
+italic = { family = "JetBrains Mono SemiBold", style = "Italic" }
+bold_italic = { family = "JetBrains Mono ExtraBold", style = "Italic" }
 size = 13.0
 offset = { x  = 0, y = 0 }
 glyph_offset = { x = 0, y = 0 }
