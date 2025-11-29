@@ -33,6 +33,7 @@ require('lazy').setup {
   require 'plugins.misc',
   require 'plugins.diffview',
   require 'plugins.mini',
+  require 'plugins.sxiva',
 }
 
 vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
