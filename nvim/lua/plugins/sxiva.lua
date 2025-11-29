@@ -2,7 +2,21 @@ return {
   'tree-sitter-sxiva',
   dir = '/home/slackwing/src/feathers/11.sxiv/editor/nvim',
   config = function()
-    require('sxiva').setup()
+    local sxiva = require 'sxiva'
+    sxiva.setup()
+
+    -- Create user commands
+    vim.api.nvim_create_user_command('Sxiv', function()
+      sxiva.recalculate()
+    end, { desc = 'Recalculate points for current .sxiva file' })
+
+    -- Keybinding for .sxiva files only
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = 'sxiva',
+      callback = function(args)
+        vim.keymap.set('n', ';s', ':Sxiv<CR>', { buffer = args.buf, desc = 'Recalculate SXIVA points', silent = true })
+      end,
+    })
 
     -- Set custom highlight colors for SXIVA
     -- Times in red/orange
