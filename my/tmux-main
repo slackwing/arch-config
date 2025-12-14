@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+TMUX_NS="main-namespace"
+SESSION="main"
+
+# Start server
+tmux -L "$TMUX_NS" start-server
+
+# Attach if session exists
+if tmux -L "$TMUX_NS" has-session -t "$SESSION" 2>/dev/null; then
+    exec tmux -L "$TMUX_NS" attach -t "$SESSION"
+fi
+
+# Config
+tmux -L "$TMUX_NS" new-session -d -s "$SESSION" -n "config" -c "$HOME/.config"
+
+# Window 1: Config
+tmux -L "$TMUX_NS" split-window -h -t "$SESSION:config" -c "$HOME/.config"
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:config".1
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:config" "nvim ." C-m
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:config".2
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:config" "git status" C-m
+
+# Window 2: Sxiva
+tmux -L "$TMUX_NS" new-window -t "$SESSION" -n "sxiva" -c "$HOME/src/feathers/11.sxiv"
+tmux -L "$TMUX_NS" split-window -h -t "$SESSION:sxiva" -c "$HOME/src/feathers/11.sxiv"
+tmux -L "$TMUX_NS" split-window -v -t "$SESSION:sxiva" -c "$HOME/src/feathers/11.sxiv"
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:sxiva".1
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:sxiva" "nvim ." C-m
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:sxiva".2
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:sxiva" "claude" C-m
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:sxiva".3
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:sxiva" "git status" C-m
+
+# Window 3: Algo
+tmux -L "$TMUX_NS" new-window -t "$SESSION" -n "algo" -c "$HOME/src/darkfeather/0g.algo-celes"
+tmux -L "$TMUX_NS" split-window -h -t "$SESSION:algo" -c "$HOME/src/darkfeather/0g.algo-celes"
+tmux -L "$TMUX_NS" split-window -v -t "$SESSION:algo" -c "$HOME/src/darkfeather/0g.algo-celes"
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:algo".1
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:algo" "nvim ." C-m
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:algo".2
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:algo" "claude" C-m
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:algo".3
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:algo" "git status" C-m
+
+# Focus + attach
+tmux -L "$TMUX_NS" select-window -t "$SESSION:config"
+exec tmux -L "$TMUX_NS" attach -t "$SESSION"

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+TMUX_NS="sxiva-namespace"
+SESSION="sxiva"
+
+# Start server
+tmux -L "$TMUX_NS" start-server
+
+# Attach if session exists
+if tmux -L "$TMUX_NS" has-session -t "$SESSION" 2>/dev/null; then
+    exec tmux -L "$TMUX_NS" attach -t "$SESSION"
+fi
+
+tmux -L "$TMUX_NS" new-session -d -s "$SESSION" -n "minutes" -c "$HOME/src/minutes/data"
+tmux -L "$TMUX_NS" new-window -t "$SESSION" -n "quick" -c "$HOME"
+
+# Focus + attach
+tmux -L "$TMUX_NS" select-window -t "$SESSION:minutes"
+exec tmux -L "$TMUX_NS" attach -t "$SESSION"

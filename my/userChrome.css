@@ -1,0 +1,73 @@
+/* ========= Minimal "autohide chrome but keep Ctrl+L working" ========= */
+
+/* Tabs + bookmarks gone */
+#TabsToolbar { display: none !important; }
+#PersonalToolbar { display: none !important; }
+
+/* --- Default: hide the entire toolbox (but do NOT visibility:hidden) --- */
+#navigator-toolbox {
+  max-height: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  border: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* --- Reveal when focus enters (Ctrl+L, Ctrl+T, etc.) --- */
+#navigator-toolbox:focus-within {
+  max-height: 200px !important;   /* plenty of room for urlbar + results */
+  overflow: visible !important;   /* critical: don't clip breakout/results */
+  opacity: 1 !important;
+}
+
+/* Keep nav-bar itself from adding stray pixels when hidden */
+#nav-bar {
+  margin: 0 !important;
+  border: 0 !important;
+  padding: 0 !important;
+}
+
+/* When revealed, give the nav-bar real height so breakout math has room */
+#navigator-toolbox:focus-within #nav-bar {
+  min-height: 40px !important;    /* tweak if you want */
+  padding-top: 6px !important;    /* moves urlbar down (prevents half-hidden) */
+  padding-bottom: 6px !important;
+}
+
+/* ========= Breakout alignment fixes (based on your DOM) ========= */
+
+/* 1) Your #urlbar-container is being squeezed (you saw --urlbar-container-height: 8px).
+      Kill that and make the container a stable positioning context. */
+#urlbar-container {
+  height: auto !important;
+  min-height: var(--urlbar-height, 32px) !important;
+  --urlbar-container-height: auto !important;
+  position: relative !important;
+  overflow: visible !important;
+}
+
+/* 2) Ensure urlbar itself has a sane anchor context */
+#urlbar {
+  position: relative !important;
+  top: auto !important;
+  inset-block-start: auto !important;
+}
+
+/* 3) When breakout engages (your attrs), keep it from jumping upward.
+      We pin it to the container instead of whatever "top:0" it tries. */
+:root { --uc-breakout-y: 0px; } /* set to e.g. 6px if you want it lower */
+
+#navigator-toolbox:focus-within #urlbar[breakout="true"],
+#navigator-toolbox:focus-within #urlbar[breakout-extend-animate="true"] {
+  top: var(--uc-breakout-y) !important;
+  inset-block-start: var(--uc-breakout-y) !important;
+}
+
+/* 4) When hidden, prevent random "breakout peek" without killing focus */
+#navigator-toolbox:not(:focus-within) #urlbar {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+

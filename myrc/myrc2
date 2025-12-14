@@ -27,6 +27,7 @@ wificd() {
   nmcli device wifi connect $1 password $2
 }
 alias wallpaper='pkill hyprpaper ; hyprpaper & ; disown'
+alias updatepacman='sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist; sudo pacman -Syyu'
 
 
 
