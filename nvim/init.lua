@@ -41,20 +41,22 @@ vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
 vim.api.nvim_set_hl(0, 'SignColumn', { bg = 'none' })
 vim.api.nvim_set_hl(0, 'EndOfBuffer', { bg = 'none' })
 
--- Midpoint between #000000 and tmux ianctive (#0A0A00).
-local inactive = '#050500'
--- Midpoint between tmux inactive and tmux active.
-local active = '#1B1B00'
+local inactive = '#000000'
+local active = '#0A0A0A'
 
 -- Set initial highlight groups
 vim.api.nvim_set_hl(0, 'Normal', { bg = active })
 vim.api.nvim_set_hl(0, 'NormalNC', { bg = inactive })
+vim.api.nvim_set_hl(0, 'NeoTreeNormal', { bg = inactive })
+vim.api.nvim_set_hl(0, 'NeoTreeNormalNC', { bg = inactive })
 
 -- When a Neovim window becomes active
 vim.api.nvim_create_autocmd({ 'WinEnter', 'FocusGained' }, {
   callback = function()
     vim.api.nvim_set_hl(0, 'Normal', { bg = active })
     vim.api.nvim_set_hl(0, 'NormalNC', { bg = inactive })
+    vim.api.nvim_set_hl(0, 'NeoTreeNormal', { bg = active })
+    vim.api.nvim_set_hl(0, 'NeoTreeNormalNC', { bg = inactive })
     vim.cmd 'redraw'
   end,
 })
@@ -65,6 +67,8 @@ vim.api.nvim_create_autocmd({ 'FocusLost' }, {
     -- Force ALL windows into inactive color
     vim.api.nvim_set_hl(0, 'Normal', { bg = inactive })
     vim.api.nvim_set_hl(0, 'NormalNC', { bg = inactive })
+    vim.api.nvim_set_hl(0, 'NeoTreeNormal', { bg = inactive })
+    vim.api.nvim_set_hl(0, 'NeoTreeNormalNC', { bg = inactive })
     vim.cmd 'redraw'
   end,
 })

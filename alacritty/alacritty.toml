@@ -17,5 +17,5 @@ opacity = 0.85
 transparent_background_colors = true
 
 [colors.primary]
-background = "#0A0A00"
+background = "#000000"
 
