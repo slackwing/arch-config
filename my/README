@@ -1,7 +1,0 @@
-# tmux-*
-
-Symlink from ~/.local/bin/ to run manually.
-
-# userChrome.css
-
-In Firefox go to about:support then open the Profile Directory, create or open a directory "chrome/", and symlink to this file.

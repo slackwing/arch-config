@@ -117,6 +117,7 @@ website_sync() {
             --delete-delay \
             --filter='P .staging/' \
             --filter='P shared/assets/' \
+            --filter='P **/wordpress/' \
             --itemize-changes \
             --protect-args \
             $1 "acheong87@35.243.192.242:/var/www/html/$2"
