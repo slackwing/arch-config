@@ -6,7 +6,7 @@ alias system_update='sudo pacman -Syu'
 alias h='history'
 alias hc='nvim ~/.config/hypr/hyprland.conf'
 alias hcd='cd ~/.config/hypr/'
-alias myrc='nvim ~/.myrc2 ; source ~/.myrc2'
+alias myrc='nvim ~/.config/my/myrc2.sh ; source ~/.config/my/myrc2.sh'
 alias keyc='sudo nvim /etc/keyd/default.conf'
 alias keycd='cd /etc/keyd/'
 alias keyr='sudo systemctl restart keyd'
@@ -27,24 +27,21 @@ alias tmuxc='nvim ~/.config/tmux/tmux.conf'
 alias tmuxcd='cd ~/.config/tmux'
 alias wifils='nmcli device wifi list'
 wificd() {
-  nmcli device wifi connect $1 password $2
+    nmcli device wifi connect $1 password $2
 }
 alias wallpaper='pkill hyprpaper ; hyprpaper & ; disown'
 alias updatepacman='sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist; sudo pacman -Syyu'
 alias last='nvim /home/slackwing/src/minutes/last'
 alias ssha='ssh-add ~/.ssh/id_ed25519_gcp_202512'
 tmux_panic() {
-  tmux -L main-namespace list-panes -a -F '#S:#W.#P pid=#{pane_pid} cmd=#{pane_current_command} path=#{pane_current_path}'
+    tmux -L main-namespace list-panes -a -F '#S:#W.#P pid=#{pane_pid} cmd=#{pane_current_command} path=#{pane_current_path}'
 }
-
-
-
 
 # Git
 
-alias gdrop='git checkout --'                    # as opposed to stashing; supply argument "." for all or specific files
+alias gdrop='git checkout --' # as opposed to stashing; supply argument "." for all or specific files
 alias guncommit='git reset --soft HEAD~1'
-alias gunstage='git restore --staged .'          # undo all added to stage (preserve)
+alias gunstage='git restore --staged .' # undo all added to stage (preserve)
 gb() {
     # https://stackoverflow.com/a/44529712/925913
     git for-each-ref --sort=-committerdate refs/heads --format='%(authordate:short) %(color:red)%(objectname:short) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committerdate:relative)%(color:reset))' | head -n 10
@@ -55,83 +52,82 @@ alias gl='git log --pretty=format:"%h %an %ar - %s" | head -n 10'
 
 # Server
 
-  alias ws_ssh='ssh -i ~/.ssh/id_ed25519_gcp_202512 acheong87@35.243.192.242'
+alias ws_ssh='ssh -i ~/.ssh/id_ed25519_gcp_202512 acheong87@35.243.192.242'
 
 # Website
 
 export SRC="$HOME/src"
 
-  # Navigating to feathers or a worktree.
+# Navigating to feathers or a worktree.
 
-    alias gworktree='echo "git worktree add (-b <new-branch> <$SRC/worktree-<name>|<$SRC/worktree-<name> <existing-branch>)"'
+alias gworktree='echo "git worktree add (-b <new-branch> <$SRC/worktree-<name>|<$SRC/worktree-<name> <existing-branch>)"'
 
-    alias feathers='echo "WARN: Leaving any worktree!\n"; cd $SRC/feathers'
+alias feathers='echo "WARN: Leaving any worktree!\n"; cd $SRC/feathers'
 
-    worktree() {
-      cd "$SRC/worktree-$1"
-    }
+worktree() {
+    cd "$SRC/worktree-$1"
+}
 
-    alias worktrees='ls -d $SRC/worktree-* | xargs -n 1 basename | sort'
+alias worktrees='ls -d $SRC/worktree-* | xargs -n 1 basename | sort'
 
-  # Navigating to relative subpaths.
+# Navigating to relative subpaths.
 
-    alias html="cd foundry/website/html/"
+alias html="cd foundry/website/html/"
 
-  # Global shortcuts.
+# Global shortcuts.
 
-    alias journal="worktree journal ; html"
+alias journal="worktree journal ; html"
 
-  # Updating the server (safely).
+# Updating the server (safely).
 
-    currentDirIs() {
-      current_dir_name=$(basename "$PWD")
-      if [[ "$current_dir_name" == "$1" ]]; then
-          return 0
-      else
-          return 1
-      fi
-    }
+currentDirIs() {
+    current_dir_name=$(basename "$PWD")
+    if [[ "$current_dir_name" == "$1" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
 
-    require_git_branch() {
-      local required="$1"
-      local branch
-      branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null) || {
+require_git_branch() {
+    local required="$1"
+    local branch
+    branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null) || {
         echo "Not in a git repository." >&2
         return 1
-      }
-      if [[ "$branch" != "$required" ]]; then
+    }
+    if [[ "$branch" != "$required" ]]; then
         echo "Must be on branch '$required' (currently on '$branch')." >&2
         return 1
-      fi
-    }
+    fi
+}
 
-    website_sync() {
-      if [[ $# -lt 2 ]]; then
+website_sync() {
+    if [[ $# -lt 2 ]]; then
         echo "Error: Less than 2 arguments supplied." >&2
         return 1
-      fi
-      if [[ -n "${3:-}" ]]; then
+    fi
+    if [[ -n "${3:-}" ]]; then
         require_git_branch "$3" || return 1
-      fi
-      if currentDirIs "html"; then
+    fi
+    if currentDirIs "html"; then
         echo "\nUploading $PWD/$1 to <remote>/$2 ...\n"
         rsync -avOc \
-          --delete \
-          --delete-delay \
-          --filter='P .staging/' \
-          --filter='P shared/assets/' \
-          --itemize-changes \
-          --protect-args \
-          $1 "acheong87@35.243.192.242:/var/www/html/$2"
-      else
+            --delete \
+            --delete-delay \
+            --filter='P .staging/' \
+            --filter='P shared/assets/' \
+            --itemize-changes \
+            --protect-args \
+            $1 "acheong87@35.243.192.242:/var/www/html/$2"
+    else
         echo "Must be in html/ directory; currently in $PWD."
-      fi
-    }
+    fi
+}
 
-  # Convenience.
+# Convenience.
 
-    alias ws_prod='website_sync . . master'
-    alias ws_stag='website_sync . .staging/'
-    alias wsj_prod='website_sync journal/ journal/ master'
-    alias wsj_stag='website_sync journal/ .staging/journal/ ___journal'
-
+alias ws_prod='website_sync . . master'
+alias ws_stag='website_sync . .staging/'
+alias wsj_prod='website_sync journal/ journal/ master'
+alias wsj_stag='website_sync journal/ .staging/journal/ ___journal'
