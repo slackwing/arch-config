@@ -34,6 +34,7 @@ require('lazy').setup {
   require 'plugins.diffview',
   require 'plugins.mini',
   require 'plugins.sxiva',
+  require 'plugins.copilot',
 }
 
 -- Set transparency for floating windows, signs, etc
