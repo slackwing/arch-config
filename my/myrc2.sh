@@ -7,6 +7,7 @@ alias h='history'
 alias hc='nvim ~/.config/hypr/hyprland.conf'
 alias hcd='cd ~/.config/hypr/'
 alias myrc='nvim ~/.config/my/myrc2.sh ; source ~/.config/my/myrc2.sh'
+alias mycd='cd ~/.config/my/'
 alias keyc='sudo nvim /etc/keyd/default.conf'
 alias keycd='cd /etc/keyd/'
 alias keyr='sudo systemctl restart keyd'
@@ -36,6 +37,7 @@ alias ssha='ssh-add ~/.ssh/id_ed25519_gcp_202512'
 tmux_panic() {
     tmux -L main-namespace list-panes -a -F '#S:#W.#P pid=#{pane_pid} cmd=#{pane_current_command} path=#{pane_current_path}'
 }
+alias minutes='cd ~/src/minutes/data/'
 
 # Git
 

@@ -18,7 +18,7 @@ if [[ -z "${latest_png:-}" ]]; then
 fi
 
 # Copy to clipboard (Wayland)
-printf '/Image "%s"' "$latest_png" | wl-copy
+printf '%s' "$latest_png" | wl-copy
 
 # Optional notification
 command -v notify-send >/dev/null 2>&1 &&

@@ -60,11 +60,11 @@ tmux -L "$TMUX_NS" select-pane -t "$SESSION:study".1
 tmux -L "$TMUX_NS" send-keys -t "$SESSION:study" "git status" C-m
 
 # Window 6: Website
-tmux -L "$TMUX_NS" new-window -t "$SESSION" -n "kaprekar" -c "$HOME/src/feathers/foundry/website/html"
-tmux -L "$TMUX_NS" split-window -v -p 25 -t "$SESSION:kaprekar" -c "$HOME/src/feathers/foundry/website/html"
-tmux -L "$TMUX_NS" select-pane -t "$SESSION:kaprekar".1
-tmux -L "$TMUX_NS" select-pane -t "$SESSION:kaprekar".2
-tmux -L "$TMUX_NS" send-keys -t "$SESSION:kaprekar" "git status" C-m
+tmux -L "$TMUX_NS" new-window -t "$SESSION" -n "website" -c "$HOME/src/feathers/foundry/website/html"
+tmux -L "$TMUX_NS" split-window -h -p 25 -t "$SESSION:website" -c "$HOME/src/feathers/foundry/website/html"
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:website".1
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:website".2
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:website" "git status" C-m
 
 # Focus + attach
 tmux -L "$TMUX_NS" select-window -t "$SESSION:config"
