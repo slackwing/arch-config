@@ -10,11 +10,26 @@ return {
       sxiva.recalculate()
     end, { desc = 'Recalculate points for current .sxiva file' })
 
-    -- Keybinding for .sxiva files only
+    vim.api.nvim_create_user_command('SxivaLogNow', function()
+      sxiva.log_now()
+    end, { desc = 'Set last entry end time to current time' })
+
+    vim.api.nvim_create_user_command('SxivaLogEnd', function()
+      sxiva.log_end()
+    end, { desc = 'Clean up last incomplete entry (remove notes after ---)' })
+
+    vim.api.nvim_create_user_command('SxivaRepeatEntry', function()
+      sxiva.repeat_entry()
+    end, { desc = 'Duplicate last entry with +12 min start time' })
+
+    -- Keybindings for .sxiva files only
     vim.api.nvim_create_autocmd('FileType', {
       pattern = 'sxiva',
       callback = function(args)
         vim.keymap.set('n', ';s', ':Sxiv<CR>', { buffer = args.buf, desc = 'Recalculate SXIVA points', silent = true })
+        vim.keymap.set('n', ';l', ':SxivaLogNow<CR>', { buffer = args.buf, desc = 'Log current time', silent = true })
+        vim.keymap.set('n', ';e', ':SxivaLogEnd<CR>', { buffer = args.buf, desc = 'Clean incomplete entry', silent = true })
+        vim.keymap.set('n', ';r', ':SxivaRepeatEntry<CR>', { buffer = args.buf, desc = 'Repeat last entry', silent = true })
       end,
     })
 
