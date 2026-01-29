@@ -2,6 +2,8 @@ export EDITOR="nvim"
 export SXIVA_DATA="$HOME/src/minutes/data/"
 
 alias system_update='sudo pacman -Syu'
+alias mirror_update='sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist'
+alias update_pacman='sudo pacman -Syy'
 
 alias h='history'
 alias hc='nvim ~/.config/hypr/hyprland.conf'
@@ -125,6 +127,24 @@ website_sync() {
             $1 "acheong87@35.243.192.242:/var/www/html/$2"
     else
         echo "Must be in html/ directory; currently in $PWD."
+    fi
+}
+
+dashboard_sync() {
+    if currentDirIs "feathers"; then
+        rsync -av0c \
+            --delete \
+            --delete-delay \
+            --filter='P **/.env' \
+            --exclude='__pycache__' \
+            --exclude='*.pyc' \
+            --exclude='.git' \
+            --itemize-changes \
+            --protect-args \
+            11.sxiv/dashboard/ \
+            "acheong87@35.243.192.242:/var/www/dashboard/"
+    else
+        echo "Must be in feathers/ directory; currently in $PWD."
     fi
 }
 
