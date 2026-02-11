@@ -154,3 +154,6 @@ alias ws_prod='website_sync . . master'
 alias ws_stag='website_sync . .staging/'
 alias wsj_prod='website_sync journal/ journal/ master'
 alias wsj_stag='website_sync journal/ .staging/journal/ ___journal'
+
+alias start_docker='sudo systemctl start docker'
+alias start_local='feathers ; cd 11.sxiv/dashboard/docker ; docker compose up -d'
