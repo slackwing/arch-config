@@ -38,6 +38,7 @@ alias last='nvim /home/slackwing/src/minutes/last'
 alias ssha='ssh-add ~/.ssh/id_ed25519_gcp_202512'
 tmux_panic() {
     tmux -L main-namespace list-panes -a -F '#S:#W.#P pid=#{pane_pid} cmd=#{pane_current_command} path=#{pane_current_path}'
+    tmux -L sxiva-namespace list-panes -a -F '#S:#W.#P pid=#{pane_pid} cmd=#{pane_current_command} path=#{pane_current_path}'
 }
 alias minutes='cd ~/src/minutes/data/'
 
