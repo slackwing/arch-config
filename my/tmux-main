@@ -66,6 +66,17 @@ tmux -L "$TMUX_NS" select-pane -t "$SESSION:website".1
 tmux -L "$TMUX_NS" select-pane -t "$SESSION:website".2
 tmux -L "$TMUX_NS" send-keys -t "$SESSION:website" "git status" C-m
 
+# Window 7: Fesh
+tmux -L "$TMUX_NS" new-window -t "$SESSION" -n "fesh" -c "$HOME/src/worktree-fesh/14.fesh"
+tmux -L "$TMUX_NS" split-window -h -t "$SESSION:fesh" -c "$HOME/src/worktree-fesh/14.fesh"
+tmux -L "$TMUX_NS" split-window -v -t "$SESSION:fesh" -c "$HOME/src/worktree-fesh/14.fesh"
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:fesh".1
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:fesh" "nvim ." C-m
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:fesh".2
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:fesh" "claude" C-m
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:fesh".3
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:fesh" "git status" C-m
+
 # Focus + attach
 tmux -L "$TMUX_NS" select-window -t "$SESSION:config"
 exec tmux -L "$TMUX_NS" attach -t "$SESSION"
