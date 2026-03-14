@@ -77,6 +77,17 @@ tmux -L "$TMUX_NS" send-keys -t "$SESSION:fesh" "claude" C-m
 tmux -L "$TMUX_NS" select-pane -t "$SESSION:fesh".3
 tmux -L "$TMUX_NS" send-keys -t "$SESSION:fesh" "git status" C-m
 
+# Window 8: Writing
+tmux -L "$TMUX_NS" new-window -t "$SESSION" -n "writing" -c "$HOME/src/worktree-stories/foundry/website/html"
+tmux -L "$TMUX_NS" split-window -h -t "$SESSION:writing" -c "$HOME/src/worktree-stories/foundry/website/html"
+tmux -L "$TMUX_NS" split-window -v -t "$SESSION:writing" -c "$HOME/src/worktree-stories/foundry/website/html"
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:writing".1
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:writing" "nvim ." C-m
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:writing".2
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:writing" "claude" C-m
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:writing".3
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:writing" "git status" C-m
+
 # Focus + attach
 tmux -L "$TMUX_NS" select-window -t "$SESSION:config"
 exec tmux -L "$TMUX_NS" attach -t "$SESSION"
