@@ -44,15 +44,25 @@ tmux -L "$TMUX_NS" send-keys -t "$SESSION:algo" "claude" C-m
 tmux -L "$TMUX_NS" select-pane -t "$SESSION:algo".3
 tmux -L "$TMUX_NS" send-keys -t "$SESSION:algo" "git status" C-m
 
-# Window 4: Kaprekar
-tmux -L "$TMUX_NS" new-window -t "$SESSION" -n "kaprekar" -c "$HOME/src/feathers/12.kaprekar"
-tmux -L "$TMUX_NS" split-window -h -t "$SESSION:kaprekar" -c "$HOME/src/feathers/12.kaprekar"
-tmux -L "$TMUX_NS" split-window -v -t "$SESSION:kaprekar" -c "$HOME/src/feathers/12.kaprekar"
-tmux -L "$TMUX_NS" select-pane -t "$SESSION:kaprekar".1
-tmux -L "$TMUX_NS" select-pane -t "$SESSION:kaprekar".2
-tmux -L "$TMUX_NS" send-keys -t "$SESSION:kaprekar" "claude" C-m
-tmux -L "$TMUX_NS" select-pane -t "$SESSION:kaprekar".3
-tmux -L "$TMUX_NS" send-keys -t "$SESSION:kaprekar" "git status" C-m
+# # Window 4: Kaprekar
+# tmux -L "$TMUX_NS" new-window -t "$SESSION" -n "kaprekar" -c "$HOME/src/feathers/12.kaprekar"
+# tmux -L "$TMUX_NS" split-window -h -t "$SESSION:kaprekar" -c "$HOME/src/feathers/12.kaprekar"
+# tmux -L "$TMUX_NS" split-window -v -t "$SESSION:kaprekar" -c "$HOME/src/feathers/12.kaprekar"
+# tmux -L "$TMUX_NS" select-pane -t "$SESSION:kaprekar".1
+# tmux -L "$TMUX_NS" select-pane -t "$SESSION:kaprekar".2
+# tmux -L "$TMUX_NS" send-keys -t "$SESSION:kaprekar" "claude" C-m
+# tmux -L "$TMUX_NS" select-pane -t "$SESSION:kaprekar".3
+# tmux -L "$TMUX_NS" send-keys -t "$SESSION:kaprekar" "git status" C-m
+
+# Window 4: Writesys
+tmux -L "$TMUX_NS" new-window -t "$SESSION" -n "writesys" -c "$HOME/src/worktree-writesys/14.writesys"
+tmux -L "$TMUX_NS" split-window -h -t "$SESSION:writesys" -c "$HOME/src/worktree-writesys/14.writesys"
+tmux -L "$TMUX_NS" split-window -v -t "$SESSION:writesys" -c "$HOME/src/worktree-writesys/14.writesys"
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:writesys".1
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:writesys".2
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:writesys" "claude" C-m
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:writesys".3
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:writesys" "git status" C-m
 
 # Window 5: Study
 tmux -L "$TMUX_NS" new-window -t "$SESSION" -n "study" -c "$HOME/src/feathers/13.ean"

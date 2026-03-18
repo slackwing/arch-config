@@ -9,4 +9,7 @@
 !nvim/
 !tmux/
 !my/
+!.claude/
+.claude/*
+!.claude/agents/
 tmux/plugins/
