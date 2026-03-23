@@ -54,6 +54,7 @@ gb() {
 alias g-='git checkout -'
 alias gm='git checkout "$(git symbolic-ref refs/remotes/origin/HEAD | cut -d'/' -f4)"'
 alias gl='git log --pretty=format:"%h %an %ar - %s" | head -n 10'
+alias gwip='git add . ; git commit -m"wip(wip): wip"'
 
 # Server
 
