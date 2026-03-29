@@ -29,7 +29,7 @@ tmux -L "$TMUX_NS" split-window -v -t "$SESSION:sxiva" -c "$HOME/src/feathers/11
 tmux -L "$TMUX_NS" select-pane -t "$SESSION:sxiva".1
 tmux -L "$TMUX_NS" send-keys -t "$SESSION:sxiva" "nvim ." C-m
 tmux -L "$TMUX_NS" select-pane -t "$SESSION:sxiva".2
-tmux -L "$TMUX_NS" send-keys -t "$SESSION:sxiva" "claude" C-m
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:sxiva" "claude --dangerously-skip-permissions" C-m
 tmux -L "$TMUX_NS" select-pane -t "$SESSION:sxiva".3
 tmux -L "$TMUX_NS" send-keys -t "$SESSION:sxiva" "git status" C-m
 
@@ -40,7 +40,7 @@ tmux -L "$TMUX_NS" split-window -v -t "$SESSION:algo" -c "$HOME/src/darkfeather/
 tmux -L "$TMUX_NS" select-pane -t "$SESSION:algo".1
 tmux -L "$TMUX_NS" send-keys -t "$SESSION:algo" "nvim ." C-m
 tmux -L "$TMUX_NS" select-pane -t "$SESSION:algo".2
-tmux -L "$TMUX_NS" send-keys -t "$SESSION:algo" "claude" C-m
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:algo" "claude --dangerously-skip-permissions" C-m
 tmux -L "$TMUX_NS" select-pane -t "$SESSION:algo".3
 tmux -L "$TMUX_NS" send-keys -t "$SESSION:algo" "git status" C-m
 
@@ -50,7 +50,7 @@ tmux -L "$TMUX_NS" send-keys -t "$SESSION:algo" "git status" C-m
 # tmux -L "$TMUX_NS" split-window -v -t "$SESSION:kaprekar" -c "$HOME/src/feathers/12.kaprekar"
 # tmux -L "$TMUX_NS" select-pane -t "$SESSION:kaprekar".1
 # tmux -L "$TMUX_NS" select-pane -t "$SESSION:kaprekar".2
-# tmux -L "$TMUX_NS" send-keys -t "$SESSION:kaprekar" "claude" C-m
+# tmux -L "$TMUX_NS" send-keys -t "$SESSION:kaprekar" "claude --dangerously-skip-permissions" C-m
 # tmux -L "$TMUX_NS" select-pane -t "$SESSION:kaprekar".3
 # tmux -L "$TMUX_NS" send-keys -t "$SESSION:kaprekar" "git status" C-m
 
@@ -60,7 +60,7 @@ tmux -L "$TMUX_NS" split-window -h -t "$SESSION:writesys" -c "$HOME/src/worktree
 tmux -L "$TMUX_NS" split-window -v -t "$SESSION:writesys" -c "$HOME/src/worktree-writesys/14.writesys"
 tmux -L "$TMUX_NS" select-pane -t "$SESSION:writesys".1
 tmux -L "$TMUX_NS" select-pane -t "$SESSION:writesys".2
-tmux -L "$TMUX_NS" send-keys -t "$SESSION:writesys" "claude" C-m
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:writesys" "claude --dangerously-skip-permissions" C-m
 tmux -L "$TMUX_NS" select-pane -t "$SESSION:writesys".3
 tmux -L "$TMUX_NS" send-keys -t "$SESSION:writesys" "git status" C-m
 
@@ -83,7 +83,7 @@ tmux -L "$TMUX_NS" split-window -v -t "$SESSION:fesh" -c "$HOME/src/worktree-fes
 tmux -L "$TMUX_NS" select-pane -t "$SESSION:fesh".1
 tmux -L "$TMUX_NS" send-keys -t "$SESSION:fesh" "nvim ." C-m
 tmux -L "$TMUX_NS" select-pane -t "$SESSION:fesh".2
-tmux -L "$TMUX_NS" send-keys -t "$SESSION:fesh" "claude" C-m
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:fesh" "claude --dangerously-skip-permissions" C-m
 tmux -L "$TMUX_NS" select-pane -t "$SESSION:fesh".3
 tmux -L "$TMUX_NS" send-keys -t "$SESSION:fesh" "git status" C-m
 
@@ -94,9 +94,19 @@ tmux -L "$TMUX_NS" split-window -v -t "$SESSION:writing" -c "$HOME/src/worktree-
 tmux -L "$TMUX_NS" select-pane -t "$SESSION:writing".1
 tmux -L "$TMUX_NS" send-keys -t "$SESSION:writing" "nvim ." C-m
 tmux -L "$TMUX_NS" select-pane -t "$SESSION:writing".2
-tmux -L "$TMUX_NS" send-keys -t "$SESSION:writing" "claude" C-m
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:writing" "claude --dangerously-skip-permissions" C-m
 tmux -L "$TMUX_NS" select-pane -t "$SESSION:writing".3
 tmux -L "$TMUX_NS" send-keys -t "$SESSION:writing" "git status" C-m
+
+# Window 9: segman
+tmux -L "$TMUX_NS" new-window -t "$SESSION" -n "segman" -c "$HOME/src/worktree-writesys/15.segman"
+tmux -L "$TMUX_NS" split-window -h -t "$SESSION:segman" -c "$HOME/src/worktree-writesys/15.segman"
+tmux -L "$TMUX_NS" split-window -v -t "$SESSION:segman" -c "$HOME/src/worktree-writesys/15.segman"
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:segman".1
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:segman".2
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:segman" "claude --dangerously-skip-permissions" C-m
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:segman".3
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:segman" "git status" C-m
 
 # Focus + attach
 tmux -L "$TMUX_NS" select-window -t "$SESSION:config"

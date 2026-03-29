@@ -73,3 +73,10 @@ vim.api.nvim_create_autocmd({ 'FocusLost' }, {
     vim.cmd 'redraw'
   end,
 })
+
+-- Manuscript
+vim.filetype.add {
+  extension = {
+    manuscript = 'manuscript',
+  },
+}
