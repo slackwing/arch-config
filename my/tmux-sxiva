@@ -15,6 +15,8 @@ fi
 tmux -L "$TMUX_NS" new-session -d -s "$SESSION" -n "minutes" -c "$HOME/src/minutes/data"
 tmux -L "$TMUX_NS" new-window -t "$SESSION" -n "quick" -c "$HOME"
 
+~/.config/hypr/scripts/tag_sxiva.sh
+
 # Focus + attach
 tmux -L "$TMUX_NS" select-window -t "$SESSION:minutes"
 exec tmux -L "$TMUX_NS" attach -t "$SESSION"

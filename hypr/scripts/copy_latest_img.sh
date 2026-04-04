@@ -22,4 +22,4 @@ printf '%s' "$latest_png" | wl-copy
 
 # Optional notification
 command -v notify-send >/dev/null 2>&1 &&
-    notify-send "Claude image command" "Copied /Image command to clipboard"
+    notify-send "Copy last image path" "Copied $latest_png to clipboard"
