@@ -54,20 +54,31 @@ tmux -L "$TMUX_NS" send-keys -t "$SESSION:algo" "git status" C-m
 # tmux -L "$TMUX_NS" select-pane -t "$SESSION:kaprekar".3
 # tmux -L "$TMUX_NS" send-keys -t "$SESSION:kaprekar" "git status" C-m
 
-# Window 4: Writesys
-tmux -L "$TMUX_NS" new-window -t "$SESSION" -n "writesys" -c "$HOME/src/worktree-writesys/14.writesys"
-tmux -L "$TMUX_NS" split-window -h -t "$SESSION:writesys" -c "$HOME/src/worktree-writesys/14.writesys"
-tmux -L "$TMUX_NS" split-window -v -t "$SESSION:writesys" -c "$HOME/src/worktree-writesys/14.writesys"
-tmux -L "$TMUX_NS" select-pane -t "$SESSION:writesys".1
-tmux -L "$TMUX_NS" select-pane -t "$SESSION:writesys".2
-tmux -L "$TMUX_NS" send-keys -t "$SESSION:writesys" "claude --dangerously-skip-permissions" C-m
-tmux -L "$TMUX_NS" select-pane -t "$SESSION:writesys".3
-tmux -L "$TMUX_NS" send-keys -t "$SESSION:writesys" "git status" C-m
+# Window 4: Manuscript Studio
+tmux -L "$TMUX_NS" new-window -t "$SESSION" -n "manuscript-studio" -c "$HOME/src/manuscript-studio"
+tmux -L "$TMUX_NS" split-window -h -t "$SESSION:manuscript-studio" -c "$HOME/src/manuscript-studio"
+tmux -L "$TMUX_NS" split-window -v -t "$SESSION:manuscript-studio" -c "$HOME/src/manuscript-studio"
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:manuscript-studio".1
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:manuscript-studio".2
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:manuscript-studio" "claude --dangerously-skip-permissions" C-m
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:manuscript-studio".3
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:manuscript-studio" "git status" C-m
 
 # Window 5: Study
-tmux -L "$TMUX_NS" new-window -t "$SESSION" -n "study" -c "$HOME/src/feathers/13.ean"
-tmux -L "$TMUX_NS" select-pane -t "$SESSION:study".1
-tmux -L "$TMUX_NS" send-keys -t "$SESSION:study" "git status" C-m
+# tmux -L "$TMUX_NS" new-window -t "$SESSION" -n "study" -c "$HOME/src/feathers/13.ean"
+# tmux -L "$TMUX_NS" select-pane -t "$SESSION:study".1
+# tmux -L "$TMUX_NS" send-keys -t "$SESSION:study" "git status" C-m
+
+# Window 5: Wei Collective
+tmux -L "$TMUX_NS" new-window -t "$SESSION" -n "wei" -c "$HOME/src/worktree-wei/foundry/website/html/wip/wei"
+tmux -L "$TMUX_NS" split-window -h -t "$SESSION:wei" -c "$HOME/src/worktree-wei/foundry/website/html/wip/wei"
+tmux -L "$TMUX_NS" split-window -v -t "$SESSION:wei" -c "$HOME/src/worktree-wei/foundry/website/html/wip/wei"
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:wei".1
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:wei" "nvim ." C-m
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:wei".2
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:wei" "claude --dangerously-skip-permissions" C-m
+tmux -L "$TMUX_NS" select-pane -t "$SESSION:wei".3
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:wei" "git status" C-m
 
 # Window 6: Website
 tmux -L "$TMUX_NS" new-window -t "$SESSION" -n "website" -c "$HOME/src/feathers/foundry/website/html"
