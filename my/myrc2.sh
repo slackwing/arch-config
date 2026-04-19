@@ -1,9 +1,10 @@
 export EDITOR="nvim"
 export SXIVA_DATA="$HOME/src/minutes/data/"
 
-alias system_update='sudo pacman -Syu'
-alias mirror_update='sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist'
+alias system_update='sudo yay -Syu'
+alias mirror_update='sudo reflector --latest 20 --verbose --protocol https --sort rate --save /etc/pacman.d/mirrorlist'
 alias update_pacman='sudo pacman -Syy'
+alias upgrade='update_pacman && mirror_update && system_update'
 
 alias h='history'
 alias hc='nvim ~/.config/hypr/hyprland.conf'
@@ -42,6 +43,11 @@ tmux_panic() {
 }
 alias minutes='cd ~/src/minutes/data/'
 
+# Claude
+
+alias claude_dsp='claude --dangerously-skip-permissions'
+alias claude_tele='claude --dangerously-skip-permissions --channels plugin:telegram@claude-plugins-official'
+
 # Git
 
 alias gdrop='git checkout --' # as opposed to stashing; supply argument "." for all or specific files
@@ -58,7 +64,7 @@ alias gwip='git add . ; git commit -m"wip(wip): wip"'
 
 # Server
 
-alias ws_ssh='ssh -i ~/.ssh/id_ed25519_gcp_202512 acheong87@35.243.192.242'
+alias ws_ssh='TERM=xterm-256color ssh -i ~/.ssh/id_ed25519_gcp_202512 acheong87@35.243.192.242'
 
 # Website
 
