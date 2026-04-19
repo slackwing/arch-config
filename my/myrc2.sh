@@ -165,3 +165,9 @@ alias wsj_stag='website_sync journal/ .staging/journal/ ___journal'
 
 alias start_docker='sudo systemctl start docker'
 alias start_local='feathers ; cd 11.sxiv/dashboard/docker ; docker compose up -d'
+
+cp_deploy() {
+    wl-copy <<'EOF'
+deploy_latest_manuscript_studio() { bash <(curl -sSL -H "Cache-Control: no-cache" "https://raw.githubusercontent.com/slackwing/manuscript-studio/main/install.sh"); }; deploy_latest_manuscript_studio
+EOF
+}
