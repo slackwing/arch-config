@@ -12,4 +12,5 @@
 !.claude/
 .claude/*
 !.claude/agents/
+!.claude/skills/
 tmux/plugins/
