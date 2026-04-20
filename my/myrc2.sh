@@ -50,6 +50,7 @@ alias claude_tele='claude --dangerously-skip-permissions --channels plugin:teleg
 
 # Git
 
+alias gacm='git add -A ; git commit -m'
 alias gdrop='git checkout --' # as opposed to stashing; supply argument "." for all or specific files
 alias guncommit='git reset --soft HEAD~1'
 alias gunstage='git restore --staged .' # undo all added to stage (preserve)

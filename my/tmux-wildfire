@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+TMUX_NS="wildfire-namespace"
+SESSION="wildfire"
+
+# Start server
+tmux -L "$TMUX_NS" start-server
+
+# Attach if session exists
+if tmux -L "$TMUX_NS" has-session -t "$SESSION" 2>/dev/null; then
+    exec tmux -L "$TMUX_NS" attach -t "$SESSION"
+fi
+
+tmux -L "$TMUX_NS" new-session -d -s "$SESSION" -n "wildfire" -c "$HOME/src/darkfeather/16.the-wildfire"
+tmux -L "$TMUX_NS" send-keys -t "$SESSION:wildfire" "nvim ." C-m
+tmux -L "$TMUX_NS" split-window -v -t "$SESSION:wildfire" -c "$HOME/src/darkfeather/16.the-wildfire"
+
+~/.config/hypr/scripts/tag_sxiva.sh
+
+# Focus + attach
+tmux -L "$TMUX_NS" select-window -t "$SESSION:wildfire"
+exec tmux -L "$TMUX_NS" attach -t "$SESSION"
