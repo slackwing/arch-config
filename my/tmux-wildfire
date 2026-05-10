@@ -16,8 +16,6 @@ tmux -L "$TMUX_NS" new-session -d -s "$SESSION" -n "wildfire" -c "$HOME/src/dark
 tmux -L "$TMUX_NS" send-keys -t "$SESSION:wildfire" "nvim ." C-m
 tmux -L "$TMUX_NS" split-window -v -t "$SESSION:wildfire" -c "$HOME/src/darkfeather/16.the-wildfire"
 
-~/.config/hypr/scripts/tag_sxiva.sh
-
 # Focus + attach
 tmux -L "$TMUX_NS" select-window -t "$SESSION:wildfire"
 exec tmux -L "$TMUX_NS" attach -t "$SESSION"
