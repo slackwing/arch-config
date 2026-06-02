@@ -29,9 +29,9 @@ alias nvc='nvim ~/.config/nvim/'
 alias nvcd='cd ~/.config/nvim/'
 alias tmuxc='nvim ~/.config/tmux/tmux.conf'
 alias tmuxcd='cd ~/.config/tmux'
-alias wifils='nmcli device wifi list'
+alias wifils='nmcli device wifi list | head -n 20'
 wificd() {
-    nmcli device wifi connect $1 password $2
+    nmcli device wifi connect "$1" password "${2:-nopassword}"
 }
 alias wallpaper='pkill hyprpaper ; hyprpaper & ; disown'
 alias updatepacman='sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist; sudo pacman -Syyu'
