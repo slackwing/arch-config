@@ -172,3 +172,8 @@ cp_deploy() {
 deploy_latest_manuscript_studio() { bash <(curl -sSL -H "Cache-Control: no-cache" "https://raw.githubusercontent.com/slackwing/manuscript-studio/main/install.sh"); }; deploy_latest_manuscript_studio
 EOF
 }
+
+clipboard_space_to_tab() {
+    wl-paste | perl -CSDA -pe 's/\A(?:[ \x{00A0}]{4})+/"\t" x (length($&)\/4)/e' | wl-copy
+}
+alias cstt='clipboard_space_to_tab'
