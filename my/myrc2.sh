@@ -177,3 +177,8 @@ clipboard_space_to_tab() {
     wl-paste | perl -CSDA -pe 's/\A(?:[ \x{00A0}]{4})+/"\t" x (length($&)\/4)/e' | wl-copy
 }
 alias cstt='clipboard_space_to_tab'
+
+clipboard_tab_to_space() {
+    wl-paste | perl -CSDA -pe 's/\A\t+/"    " x length($&)/e' | wl-copy
+}
+alias ctts='clipboard_tab_to_space'
