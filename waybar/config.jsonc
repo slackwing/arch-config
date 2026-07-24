@@ -50,8 +50,9 @@
         "orientation": "inherit",
         "modules": ["tray", "custom/power"]
     },
-    // Word-of-the-day pills (~/src/dailyglot); hover = summary, click = popup
+    // Word-of-the-day pills (~/src/dailyglot); details on click
     "custom/dailyglot-en": {
+        "tooltip": false,
         "exec": "$HOME/.local/bin/dailyglot waybar --lang en",
         "return-type": "json",
         "interval": 300,
@@ -59,6 +60,7 @@
         "on-click": "$HOME/.local/bin/dailyglot-popup en"
     },
     "custom/dailyglot-ko": {
+        "tooltip": false,
         "exec": "$HOME/.local/bin/dailyglot waybar --lang ko",
         "return-type": "json",
         "interval": 300,
@@ -66,6 +68,7 @@
         "on-click": "$HOME/.local/bin/dailyglot-popup ko"
     },
     "custom/dailyglot-ja": {
+        "tooltip": false,
         "exec": "$HOME/.local/bin/dailyglot waybar --lang ja",
         "return-type": "json",
         "interval": 300,
@@ -73,6 +76,7 @@
         "on-click": "$HOME/.local/bin/dailyglot-popup ja"
     },
     "custom/dailyglot-ar": {
+        "tooltip": false,
         "exec": "$HOME/.local/bin/dailyglot waybar --lang ar",
         "return-type": "json",
         "interval": 300,
@@ -80,6 +84,7 @@
         "on-click": "$HOME/.local/bin/dailyglot-popup ar"
     },
     "custom/dailyglot-he": {
+        "tooltip": false,
         "exec": "$HOME/.local/bin/dailyglot waybar --lang he",
         "return-type": "json",
         "interval": 300,
@@ -87,6 +92,7 @@
         "on-click": "$HOME/.local/bin/dailyglot-popup he"
     },
     "custom/dailyglot-ru": {
+        "tooltip": false,
         "exec": "$HOME/.local/bin/dailyglot waybar --lang ru",
         "return-type": "json",
         "interval": 300,
