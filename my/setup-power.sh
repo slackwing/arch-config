@@ -12,8 +12,11 @@
 #   2. Replace the 8G swap partition with a 40G /swapfile so hibernation
 #      (image = in-use RAM, compressed) reliably fits on a 124G-RAM machine.
 #   3. Point kernel resume at the swapfile (GRUB cmdline).
-#   4. Lid close => suspend, then auto-hibernate after 90 min asleep
-#      (suspend-then-hibernate), so a closed lid can never drain overnight.
+#   4. Lid close => suspend-then-hibernate. HibernateDelaySec is left UNSET
+#      on purpose: systemd (253+) then samples the battery during sleep and
+#      hibernates only when it estimates the battery is nearly empty — so the
+#      machine sleeps indefinitely while the battery holds, and a closed lid
+#      still can never drain to dead.
 #   5. UPower: hibernate at 5% battery (lid-open case).
 #   6. Install hypridle (screen off 10 min idle, suspend 30 min idle).
 set -euo pipefail
@@ -61,17 +64,15 @@ sed -i "s|resume=UUID=${OLD_SWAP_UUID}|resume=UUID=${ROOT_UUID} resume_offset=${
 grep -q "resume_offset=${OFFSET}" /etc/default/grub || { echo "grub cmdline edit failed" >&2; exit 1; }
 grub-mkconfig -o /boot/grub/grub.cfg
 
-echo "== 5/6 logind + sleep: lid => suspend-then-hibernate (90 min) =="
-mkdir -p /etc/systemd/logind.conf.d /etc/systemd/sleep.conf.d
+echo "== 5/6 logind: lid => suspend-then-hibernate (hibernate on low battery) =="
+mkdir -p /etc/systemd/logind.conf.d
 cat > /etc/systemd/logind.conf.d/50-lid.conf <<'EOF'
 [Login]
 HandleLidSwitch=suspend-then-hibernate
 HandleLidSwitchExternalPower=suspend-then-hibernate
 EOF
-cat > /etc/systemd/sleep.conf.d/50-hibernate.conf <<'EOF'
-[Sleep]
-HibernateDelaySec=90min
-EOF
+# No HibernateDelaySec drop-in: unset means hibernate-on-battery-estimate.
+rm -f /etc/systemd/sleep.conf.d/50-hibernate.conf
 # NOTE: do NOT `systemctl restart systemd-logind` here — it tears down the
 # running Wayland session (kills Hyprland). The config applies on reboot,
 # which the GRUB resume change requires anyway.
