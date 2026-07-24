@@ -14,7 +14,14 @@
         "sway/scratchpad",
         "custom/media"
     ],
-    "modules-center": [],
+    "modules-center": [
+        "custom/dailyglot-en",
+        "custom/dailyglot-ko",
+        "custom/dailyglot-ja",
+        "custom/dailyglot-ar",
+        "custom/dailyglot-he",
+        "custom/dailyglot-ru"
+    ],
     "modules-right": [
         "custom/weather",
         "mpd",
@@ -39,6 +46,43 @@
     "group/traypwr": {
         "orientation": "inherit",
         "modules": ["tray", "custom/power"]
+    },
+    // Word-of-the-day pills (~/src/dailyglot); hover = summary, click = popup
+    "custom/dailyglot-en": {
+        "exec": "$HOME/.local/bin/dailyglot waybar --lang en",
+        "return-type": "json",
+        "interval": 3600,
+        "on-click": "$HOME/.local/bin/dailyglot-popup en"
+    },
+    "custom/dailyglot-ko": {
+        "exec": "$HOME/.local/bin/dailyglot waybar --lang ko",
+        "return-type": "json",
+        "interval": 3600,
+        "on-click": "$HOME/.local/bin/dailyglot-popup ko"
+    },
+    "custom/dailyglot-ja": {
+        "exec": "$HOME/.local/bin/dailyglot waybar --lang ja",
+        "return-type": "json",
+        "interval": 3600,
+        "on-click": "$HOME/.local/bin/dailyglot-popup ja"
+    },
+    "custom/dailyglot-ar": {
+        "exec": "$HOME/.local/bin/dailyglot waybar --lang ar",
+        "return-type": "json",
+        "interval": 3600,
+        "on-click": "$HOME/.local/bin/dailyglot-popup ar"
+    },
+    "custom/dailyglot-he": {
+        "exec": "$HOME/.local/bin/dailyglot waybar --lang he",
+        "return-type": "json",
+        "interval": 3600,
+        "on-click": "$HOME/.local/bin/dailyglot-popup he"
+    },
+    "custom/dailyglot-ru": {
+        "exec": "$HOME/.local/bin/dailyglot waybar --lang ru",
+        "return-type": "json",
+        "interval": 3600,
+        "on-click": "$HOME/.local/bin/dailyglot-popup ru"
     },
     "hyprland/workspaces": {
         "disable-scroll": true,

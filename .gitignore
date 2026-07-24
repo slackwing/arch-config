@@ -9,6 +9,7 @@
 !nvim/
 !tmux/
 !my/
+!dailyglot/
 !.claude/
 .claude/*
 !.claude/agents/

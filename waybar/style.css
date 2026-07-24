@@ -64,6 +64,27 @@ tooltip label {
     background: transparent;
 }
 
+/* dailyglot word-of-the-day pills — one island per language */
+#custom-dailyglot-en,
+#custom-dailyglot-ko,
+#custom-dailyglot-ja,
+#custom-dailyglot-ar,
+#custom-dailyglot-he,
+#custom-dailyglot-ru {
+    background: rgba(24, 24, 37, 0.85);      /* mantle */
+    border: 1px solid rgba(49, 50, 68, 0.6); /* surface0 */
+    border-radius: 14px;
+    margin: 12px 3px 2px 3px;
+    padding: 0 12px;
+}
+
+#custom-dailyglot-en { color: #89b4fa; }     /* blue */
+#custom-dailyglot-ko { color: #fab387; }     /* peach */
+#custom-dailyglot-ja { color: #f38ba8; }     /* red */
+#custom-dailyglot-ar { color: #a6e3a1; }     /* green */
+#custom-dailyglot-he { color: #f9e2af; }     /* yellow */
+#custom-dailyglot-ru { color: #cba6f7; }     /* mauve */
+
 /* Workspaces */
 button {
     border: none;

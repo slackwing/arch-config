@@ -1,0 +1,9 @@
+# Pills render in this order.
+languages = ["en", "ko", "ja", "ar", "he", "ru"]
+
+# Draw daily words from the top-N most frequent words (difficulty knob).
+frequency_top_n = 5000
+
+# "shared" (default): everyone sees the same words on a given day.
+# "machine": unique per machine. Any other string: custom salt.
+seed = "shared"
