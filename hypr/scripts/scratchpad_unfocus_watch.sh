@@ -11,6 +11,7 @@ pad_of() {  # special workspace name -> toggle-script argument
         special:S-browser*) echo "${1#special:S-browser}" ;;
         special:S-sxiva)    echo 5 ;;
         special:S-term*)    echo "${1#special:S-term}" ;;
+        special:S-claude*)  echo "${1#special:S-}" ;;
     esac
 }
 

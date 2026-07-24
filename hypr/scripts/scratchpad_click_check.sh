@@ -19,6 +19,7 @@ while read -r ws; do
             special:S-browser*) n="${ws#special:S-browser}" ;;
             special:S-sxiva)    n=5 ;;
             special:S-term*)    n="${ws#special:S-term}" ;;
+            special:S-claude*)  n="${ws#special:S-}" ;;
             *)                  continue ;;
         esac
         "$HOME/.config/hypr/scripts/scratchpad_toggle.sh" "$n"

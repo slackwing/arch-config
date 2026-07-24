@@ -5,6 +5,7 @@
 #   1/2/3  -> firefox windows (main profile)   [KP_End/KP_Down/KP_Next]
 #   5      -> terminal running sxiva           [KP_Begin]
 #   7/8/9  -> plain terminals                  [KP_Home/KP_Up/KP_Prior]
+#   claude1..4 -> claude in ~/.config/my       [KP_Add/KP_Subtract/KP_Multiply/KP_Divide]
 #   last   -> toggle whichever pad was used last        [KP_Insert / 0]
 #   peek/unpeek -> hold-to-show the last pad   [KP_Delete / . via bind+bindr]
 
@@ -16,10 +17,11 @@ URL="https://claude.ai/new"
 
 resolve_special() {
     case "$1" in
-        1|2|3) SPECIAL="special:S-browser$1" ;;
-        5)     SPECIAL="special:S-sxiva" ;;
-        7|8|9) SPECIAL="special:S-term$1" ;;
-        *)     exit 1 ;;
+        1|2|3)      SPECIAL="special:S-browser$1" ;;
+        5)          SPECIAL="special:S-sxiva" ;;
+        7|8|9)      SPECIAL="special:S-term$1" ;;
+        claude[1-4]) SPECIAL="special:S-$1" ;;
+        *)          exit 1 ;;
     esac
 }
 
@@ -116,7 +118,10 @@ launch_pad() {  # creates the pad window for $MODE/$SPECIAL, sets $addr
         # interactive zsh: Hyprland's env lacks SXIVA_DATA/EDITOR, and when
         # sxiva exits the pad stays a usable shell instead of closing.
         local cmd="alacritty"
-        [[ "$MODE" == "5" ]] && cmd="alacritty -e zsh -ic 'sxiva; exec zsh'"
+        case "$MODE" in
+            5)       cmd="alacritty -e zsh -ic 'sxiva; exec zsh'" ;;
+            claude*) cmd="alacritty --working-directory $HOME/.config/my -e zsh -ic 'claude --dangerously-skip-permissions; exec zsh'" ;;
+        esac
         hyprctl dispatch exec "[float; workspace $SPECIAL silent] $cmd"
         for _ in $(seq 1 50); do
             addr=$(find_addr)
