@@ -15,7 +15,7 @@ pad_of() {  # special workspace name -> toggle-script argument
 }
 
 socat -U - UNIX-CONNECT:"$SOCKET" | while read -r line; do
-    [[ "$line" == activewindowv2\>\>* ]] || continue
+    [[ "$line" == activewindowv2\>\>* || "$line" == focusedmonv2\>\>* ]] || continue
 
     # Let dispatch batches (summon = toggle+focus+center) settle before
     # judging, then act on live state rather than the event payload.

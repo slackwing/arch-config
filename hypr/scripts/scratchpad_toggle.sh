@@ -49,13 +49,31 @@ do_show() {  # needs $addr set and capture_fs done
     else
         rm -f "$STATE"
     fi
-    # Show, focus, and re-center on this monitor (centerwindow's argument
-    # makes it respect waybar's reserved strip).
-    hyprctl --batch "dispatch togglespecialworkspace ${SPECIAL#special:} ; dispatch focuswindow address:$addr ; dispatch centerwindow 1"
+    # Pre-size and pre-center on the focused monitor while still hidden, so
+    # the reveal is a pure fade — no cross-monitor travel, no re-centering
+    # after the fact. 80% of monitor, centered in the area below waybar.
+    local mx my mw mh rl rt rr rb tw th
+    read -r mx my mw mh rl rt rr rb < <(hyprctl monitors -j | jq -r \
+        '.[] | select(.focused) | "\(.x) \(.y) \(.width) \(.height) \(.reserved[0]) \(.reserved[1]) \(.reserved[2]) \(.reserved[3])"')
+    tw=$(( mw * 80 / 100 ))
+    th=$(( mh * 80 / 100 ))
+    hyprctl --batch "dispatch resizewindowpixel exact $tw $th,address:$addr ; dispatch movewindowpixel exact $(( mx + rl + (mw - rl - rr - tw) / 2 )) $(( my + rt + (mh - rt - rb - th) / 2 )),address:$addr"
+    hyprctl --batch "dispatch togglespecialworkspace ${SPECIAL#special:} ; dispatch focuswindow address:$addr"
 }
 
 do_hide() {
-    hyprctl dispatch togglespecialworkspace "${SPECIAL#special:}"
+    # togglespecialworkspace acts on the FOCUSED monitor: if the pad is
+    # showing on a different monitor, a bare toggle would summon it there
+    # instead of closing it. Close it on the monitor that's showing it.
+    local pad_mon cur_mon
+    pad_mon=$(hyprctl monitors -j | jq -r --arg ws "$SPECIAL" \
+        '.[] | select(.specialWorkspace.name == $ws) | .name' | head -1)
+    cur_mon=$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .name')
+    if [[ -n "$pad_mon" && "$pad_mon" != "$cur_mon" ]]; then
+        hyprctl --batch "dispatch focusmonitor $pad_mon ; dispatch togglespecialworkspace ${SPECIAL#special:} ; dispatch focusmonitor $cur_mon"
+    else
+        hyprctl dispatch togglespecialworkspace "${SPECIAL#special:}"
+    fi
     # Restore fullscreen we broke when summoning (Hyprland un-fullscreens
     # under a special-workspace overlay; see hyprwm/Hyprland#6820).
     if [[ -f "$STATE" ]]; then
