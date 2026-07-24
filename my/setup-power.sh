@@ -71,6 +71,13 @@ cat > /etc/systemd/logind.conf.d/50-lid.conf <<'EOF'
 HandleLidSwitch=suspend-then-hibernate
 HandleLidSwitchExternalPower=suspend-then-hibernate
 EOF
+# Power key: never poweroff on a tap (logind's default!). Wake-from-suspend
+# is firmware-level and unaffected. Long-press (5s) = graceful shutdown.
+cat > /etc/systemd/logind.conf.d/50-power-key.conf <<'EOF'
+[Login]
+HandlePowerKey=ignore
+HandlePowerKeyLongPress=poweroff
+EOF
 # No HibernateDelaySec drop-in: unset means hibernate-on-battery-estimate.
 rm -f /etc/systemd/sleep.conf.d/50-hibernate.conf
 # NOTE: do NOT `systemctl restart systemd-logind` here — it tears down the
