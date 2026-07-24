@@ -7,6 +7,9 @@
                   // and maximized-window top
     // "width": 1280, // Waybar width
     "spacing": 0, // Gaps between modules (4px)
+    "fixed-center": false, // center group floats equidistant between left/right groups
+    // (right group is wide enough to cross absolute center, which would
+    // otherwise shove the dailyglot pills flush against it)
     // Choose the order of the modules
     "modules-left": [
         "hyprland/workspaces",
