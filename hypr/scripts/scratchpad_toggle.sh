@@ -6,13 +6,18 @@
 #   5      -> terminal running sxiva           [KP_Begin]
 #   7/8/9  -> plain terminals                  [KP_Home/KP_Up/KP_Prior]
 #   claude1..4 -> claude in ~/.config/my       [KP_Add/KP_Subtract/KP_Multiply/KP_Divide]
-#   last   -> toggle whichever pad was used last        [KP_Insert / 0]
-#   peek/unpeek -> hold-to-show the last pad   [KP_Delete / . via bind+bindr]
+#   last   -> whichever pad was used last      [KP_Insert / 0, KP_Delete / .]
+#
+# Every pad key is bound as "press <pad>" (bind) + "release <pad>" (bindr):
+# keydown shows a hidden pad immediately (or hides a visible one — tap
+# toggle); keyup hides it again only when the press was a show AND lasted
+# >= HOLD_US — i.e. holding any pad key peeks it. Watchers and ALT+S call
+# the bare "<pad>" toggle form, which is unchanged.
 
 MODE="${1:-1}"
 LAST_FILE="$XDG_RUNTIME_DIR/hypr_scratchpad_last"
 STATE="$XDG_RUNTIME_DIR/hypr_scratchpad_fs_restore"
-PEEK_FLAG="$XDG_RUNTIME_DIR/hypr_scratchpad_peek"
+HOLD_US=300000
 URL="https://claude.ai/new"
 
 resolve_special() {
@@ -136,24 +141,39 @@ launch_pad() {  # creates the pad window for $MODE/$SPECIAL, sets $addr
 }
 
 case "$MODE" in
-    peek)
-        # Hold-to-show: only if the last pad exists and is hidden.
-        [[ -f "$PEEK_FLAG" ]] && exit 0
-        MODE=$(cat "$LAST_FILE" 2>/dev/null)
-        [[ -z "$MODE" ]] && exit 0
+    press)
+        RAW="$2"
+        [[ -z "$RAW" ]] && exit 1
+        MODE="$RAW"
+        if [[ "$MODE" == "last" ]]; then
+            MODE=$(cat "$LAST_FILE" 2>/dev/null)
+            [[ -z "$MODE" ]] && exit 0
+        fi
         resolve_special "$MODE"
-        addr=$(find_addr)
-        [[ -z "$addr" ]] && exit 0
-        is_visible && exit 0
-        capture_fs
-        touch "$PEEK_FLAG"
-        do_show
+        echo "$MODE" > "$LAST_FILE"
+        PRESS_FILE="$XDG_RUNTIME_DIR/hypr_scratchpad_press_$RAW"
+        if is_visible; then
+            echo "hid" > "$PRESS_FILE"
+            do_hide
+        else
+            echo "shown ${EPOCHREALTIME//[.,]/}" > "$PRESS_FILE"
+            addr=$(find_addr)
+            capture_fs
+            [[ -z "$addr" ]] && launch_pad
+            do_show
+        fi
         exit 0
         ;;
-    unpeek)
-        [[ -f "$PEEK_FLAG" ]] || exit 0
-        rm -f "$PEEK_FLAG"
-        MODE=$(cat "$LAST_FILE" 2>/dev/null)
+    release)
+        RAW="$2"
+        [[ -z "$RAW" ]] && exit 1
+        PRESS_FILE="$XDG_RUNTIME_DIR/hypr_scratchpad_press_$RAW"
+        read -r action t < "$PRESS_FILE" 2>/dev/null || exit 0
+        rm -f "$PRESS_FILE"
+        [[ "$action" == "shown" ]] || exit 0
+        (( ${EPOCHREALTIME//[.,]/} - t >= HOLD_US )) || exit 0
+        MODE="$RAW"
+        [[ "$MODE" == "last" ]] && MODE=$(cat "$LAST_FILE" 2>/dev/null)
         [[ -z "$MODE" ]] && exit 0
         resolve_special "$MODE"
         is_visible && do_hide
