@@ -144,6 +144,9 @@ button {
 #idle_inhibitor.activated { color: #fab387; }
 #custom-power { color: #f38ba8; }
 #custom-weather { color: #89dceb; }          /* sky */
+/* Fixed width: the 5s C/F swap (and changing weather icons) must not
+ * resize the pill and nudge the centered dailyglot pills. */
+#custom-weather { min-width: 78px; }
 
 #power-profiles-daemon.performance { color: #f38ba8; }
 #power-profiles-daemon.balanced { color: #89b4fa; }
