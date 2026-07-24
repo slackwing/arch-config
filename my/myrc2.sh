@@ -173,6 +173,10 @@ alias ws_stag='website_sync . .staging/'
 alias wsj_prod='website_sync journal/ journal/ master'
 alias wsj_stag='website_sync journal/ .staging/journal/ ___journal'
 
+# Run a long computation without hypridle suspending the machine (lid-open
+# only; closing the lid still suspends). E.g. `nosleep ./train.sh`.
+alias nosleep='systemd-inhibit --what=idle:sleep --why=nosleep'
+
 alias start_docker='sudo systemctl start docker'
 alias start_local='feathers ; cd 11.sxiv/dashboard/docker ; docker compose up -d'
 
