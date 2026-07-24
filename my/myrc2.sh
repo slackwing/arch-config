@@ -1,10 +1,10 @@
 export EDITOR="nvim"
 export SXIVA_DATA="$HOME/src/minutes/data/"
 
-alias system_update='sudo yay -Syu'
-alias mirror_update='sudo reflector --latest 20 --verbose --protocol https --sort rate --save /etc/pacman.d/mirrorlist'
-alias update_pacman='sudo pacman -Syy'
 alias upgrade='update_pacman && mirror_update && system_update'
+alias mirror_update='sudo reflector --latest 20 --verbose --protocol https --sort rate --save /etc/pacman.d/mirrorlist'
+alias system_update='sudo yay -Syu'
+alias update_pacman='sudo pacman -Syy'
 
 alias h='history'
 alias hc='nvim ~/.config/hypr/hyprland.conf'
@@ -42,6 +42,7 @@ tmux_panic() {
     tmux -L sxiva-namespace list-panes -a -F '#S:#W.#P pid=#{pane_pid} cmd=#{pane_current_command} path=#{pane_current_path}'
 }
 alias minutes='cd ~/src/minutes/data/'
+alias wildfire='cd ~/src/darkfeather/16.the-wildfire/ && git pull'
 
 # Claude
 
@@ -125,12 +126,20 @@ website_sync() {
     fi
     if currentDirIs "html"; then
         echo "\nUploading $PWD/$1 to <remote>/$2 ...\n"
+        # Central excludes list — private/junk paths that must never
+        # reach the public web server. Edit the file, not this function.
+        local excludes_file="$HOME/.config/my/website_sync_excludes"
+        if [[ ! -f "$excludes_file" ]]; then
+            echo "Missing excludes file: $excludes_file — refusing to sync." >&2
+            return 1
+        fi
         rsync -avOc \
             --delete \
             --delete-delay \
             --filter='P .staging/' \
             --filter='P shared/assets/' \
             --filter='P **/wordpress/' \
+            --exclude-from "$excludes_file" \
             --itemize-changes \
             --protect-args \
             $1 "acheong87@35.243.192.242:/var/www/html/$2"
@@ -182,3 +191,20 @@ clipboard_tab_to_space() {
     wl-paste | perl -CSDA -pe 's/\A\t+/"    " x length($&)/e' | wl-copy
 }
 alias ctts='clipboard_tab_to_space'
+
+timezone() {
+    local new
+    new="$(curl -fsS --max-time 5 https://ipapi.co/timezone)"
+    if [[ -z "$new" ]]; then
+        echo "timezone: detection failed" >&2
+        return 1
+    fi
+    local old
+    old="$(timedatectl show --property=Timezone --value 2>/dev/null)"
+    if [[ "$old" == "$new" ]]; then
+        echo "timezone: already $new"
+        return 0
+    fi
+    echo "timezone: $old → $new"
+    sudo timedatectl set-timezone "$new"
+}

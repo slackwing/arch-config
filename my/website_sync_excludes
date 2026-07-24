@@ -1,0 +1,15 @@
+# Rsync excludes for website_sync (see myrc2.sh). website_sync refuses
+# to run without this file.
+# One pattern per line — rsync "FILTER RULES" exclude syntax.
+# These are never uploaded to the public web server.
+#
+# NOTE: with --delete, excluded paths already on the remote are NOT
+# deleted by rsync (exclusion also protects them). Remove stale ones
+# manually via ws_ssh.
+backups/
+reference-materials/
+.cache/
+.claude/
+__pycache__/
+*.pyc
+.git/
