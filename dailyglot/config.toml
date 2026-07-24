@@ -1,9 +1,33 @@
 # Pills render in this order.
 languages = ["en", "ko", "ja", "ar", "he", "ru"]
 
-# Draw daily words from the top-N most frequent words (difficulty knob).
+# Default frequency window for picks: the top-N most frequent words.
+# rarity bands are thirds of the window: most-common (default) = first third,
+# less-common = middle, least-common = last. All of this is applied at pick
+# time — change freely without re-syncing.
 frequency_top_n = 5000
 
 # "shared" (default): everyone sees the same words on a given day.
 # "machine": unique per machine. Any other string: custom salt.
 seed = "shared"
+
+[lang.en]
+rarity = "least-common"
+frequency_top_n = 20000  # widen the window so "least common" is genuinely rare
+
+[lang.ko]
+rarity = "less-common"
+
+[lang.ja]
+script = "hiragana"      # only words written entirely in hiragana
+spell_out = true
+frequency_top_n = 50000  # hiragana-only pool needs a wide window
+
+[lang.ar]
+spell_out = true
+
+[lang.he]
+spell_out = true
+
+[lang.ru]
+spell_out = true
