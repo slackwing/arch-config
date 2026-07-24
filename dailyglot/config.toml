@@ -27,6 +27,7 @@ display = "vocalized"    # canonical form with vowel diacritics
 spell_out = true
 
 [lang.he]
+display = "vocalized"    # canonical form with niqqud
 spell_out = true
 
 [lang.ru]
