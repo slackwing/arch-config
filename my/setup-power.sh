@@ -72,7 +72,9 @@ cat > /etc/systemd/sleep.conf.d/50-hibernate.conf <<'EOF'
 [Sleep]
 HibernateDelaySec=90min
 EOF
-systemctl restart systemd-logind
+# NOTE: do NOT `systemctl restart systemd-logind` here — it tears down the
+# running Wayland session (kills Hyprland). The config applies on reboot,
+# which the GRUB resume change requires anyway.
 
 echo "== 6/6 UPower: hibernate at 5% battery =="
 sed -i -e 's/^PercentageCritical=.*/PercentageCritical=8.0/' \
