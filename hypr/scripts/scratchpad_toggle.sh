@@ -61,11 +61,15 @@ do_hide() {
     if [[ -f "$STATE" ]]; then
         read -r fs_addr fs_mode < "$STATE"
         rm -f "$STATE"
-        local cur
+        local cur active
         cur=$(hyprctl clients -j | jq -r --arg a "$fs_addr" \
             '.[] | select(.address == $a) | .fullscreen')
-        if [[ "$cur" == "0" ]]; then
-            hyprctl --batch "dispatch focuswindow address:$fs_addr ; dispatch fullscreenstate $fs_mode -1"
+        active=$(hyprctl activewindow -j | jq -r '.address // ""')
+        # Only restore when focus came back to the window we un-fullscreened
+        # (keybind dismiss). If the user clicked a different window (unfocus
+        # hide), don't steal their focus just to re-fullscreen it.
+        if [[ "$cur" == "0" && "$active" == "$fs_addr" ]]; then
+            hyprctl dispatch fullscreenstate "$fs_mode" -1
         fi
     fi
 }
