@@ -2,8 +2,8 @@
 languages = ["en", "ko", "ja", "ar", "he", "ru"]
 
 # Default frequency window for picks: the top-N most frequent words.
-# rarity bands are thirds of the window: most-common (default) = first third,
-# less-common = middle, least-common = last. All of this is applied at pick
+# rarity bands are quarters of the window: most-common (default) |
+# less-common | least-common | rarest. All of this is applied at pick
 # time — change freely without re-syncing.
 frequency_top_n = 5000
 
@@ -12,18 +12,18 @@ frequency_top_n = 5000
 seed = "shared"
 
 [lang.en]
-rarity = "least-common"
-frequency_top_n = 20000  # widen the window so "least common" is genuinely rare
+rarity = "rarest"
+frequency_top_n = 50000  # full list; rarest quarter = genuinely new words
 
 [lang.ko]
 rarity = "less-common"
 
 [lang.ja]
-script = "hiragana"      # only words written entirely in hiragana
+display = "kana"         # show the ruby reading — no kanji in the pill
 spell_out = true
-frequency_top_n = 50000  # hiragana-only pool needs a wide window
 
 [lang.ar]
+display = "vocalized"    # canonical form with vowel diacritics
 spell_out = true
 
 [lang.he]
