@@ -72,7 +72,35 @@ capture_fs() {
          | if . == null then empty else "\(.address) \(.fullscreen)" end')
 }
 
+return_other_adopted() {
+    # Showing a pad REPLACES any other pad overlay on the focused monitor —
+    # Hyprland swaps the specials directly, so the replaced pad's hide path
+    # never runs (and the unfocus watcher only sees still-visible specials).
+    # An adopted pad would be stranded hidden in pad-land; return it to its
+    # home tile before our overlay takes over. Locals only — must not
+    # clobber $SPECIAL/$HOME_FILE/$addr of the pad being shown.
+    local ws mode hf hws oaddr
+    ws=$(hyprctl monitors -j | jq -r \
+        '.[] | select(.focused) | .specialWorkspace.name | select(startswith("special:S-"))')
+    [[ -z "$ws" || "$ws" == "$SPECIAL" ]] && return
+    case "$ws" in
+        special:S-browser*) mode="${ws#special:S-browser}" ;;
+        special:S-sxiva)    mode=5 ;;
+        special:S-term*)    mode="${ws#special:S-term}" ;;
+        special:S-claude*)  mode="${ws#special:S-}" ;;
+        *)                  return ;;
+    esac
+    hf="$XDG_RUNTIME_DIR/hypr_scratchpad_home_$mode"
+    [[ -f "$hf" ]] || return
+    read -r _ hws < "$hf"
+    oaddr=$(hyprctl clients -j | jq -r --arg ws "$ws" \
+        '[.[] | select(.workspace.name == $ws)][0].address // empty')
+    [[ -n "$oaddr" && -n "$hws" ]] && hyprctl --batch \
+        "dispatch movetoworkspacesilent $hws,address:$oaddr ; dispatch settiled address:$oaddr"
+}
+
 do_show() {  # needs $addr set and capture_fs done
+    return_other_adopted
     if [[ -n "$fs_state" ]]; then
         printf '%s\n' "$fs_state" > "$STATE"
     else
