@@ -205,8 +205,15 @@ launch_pad() {  # creates the pad window for $MODE/$SPECIAL, sets $addr
         # interactive zsh: Hyprland's env lacks SXIVA_DATA/EDITOR, and when
         # sxiva exits the pad stays a usable shell instead of closing.
         local cmd="alacritty"
+        # Telegram plugin is disabled globally (~/.claude/settings.json) so the
+        # four claude pads don't fight over the single bot token (only one
+        # getUpdates consumer is allowed per bot). ONLY the + pad (claude1)
+        # re-enables it via a per-launch --settings file, so Telegram reliably
+        # reaches that one session. Passed by PATH (not inline JSON) to avoid
+        # nested-quoting issues inside zsh -ic.
         case "$MODE" in
             5)       cmd="alacritty -e zsh -ic 'sxiva; exec zsh'" ;;
+            claude1) cmd="alacritty --working-directory $HOME/.config/my -e zsh -ic 'claude --dangerously-skip-permissions --settings $HOME/.claude/settings.telegram-pad.json; exec zsh'" ;;
             claude*) cmd="alacritty --working-directory $HOME/.config/my -e zsh -ic 'claude --dangerously-skip-permissions; exec zsh'" ;;
         esac
         hyprctl dispatch exec "[float; workspace $SPECIAL silent] $cmd"
