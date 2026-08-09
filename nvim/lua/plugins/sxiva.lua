@@ -26,10 +26,11 @@ return {
     vim.api.nvim_create_autocmd('FileType', {
       pattern = 'sxiva',
       callback = function(args)
-        vim.keymap.set('n', ';s', ':Sxiv<CR>', { buffer = args.buf, desc = 'Recalculate SXIVA points', silent = true })
-        vim.keymap.set('n', ';l', ':SxivaLogNow<CR>', { buffer = args.buf, desc = 'Log current time', silent = true })
-        vim.keymap.set('n', ';e', ':SxivaLogEnd<CR>', { buffer = args.buf, desc = 'Clean incomplete entry', silent = true })
-        vim.keymap.set('n', ';r', ':SxivaRepeatEntry<CR>', { buffer = args.buf, desc = 'Repeat last entry', silent = true })
+        -- <Cmd> mappings work in insert mode too without leaving it
+        vim.keymap.set({ 'n', 'i' }, ';s', '<Cmd>Sxiv<CR>', { buffer = args.buf, desc = 'Recalculate SXIVA points', silent = true })
+        vim.keymap.set({ 'n', 'i' }, ';l', '<Cmd>SxivaLogNow<CR>', { buffer = args.buf, desc = 'Log current time', silent = true })
+        vim.keymap.set({ 'n', 'i' }, ';e', '<Cmd>SxivaLogEnd<CR>', { buffer = args.buf, desc = 'Clean incomplete entry', silent = true })
+        vim.keymap.set({ 'n', 'i' }, ';r', '<Cmd>SxivaRepeatEntry<CR>', { buffer = args.buf, desc = 'Repeat last entry', silent = true })
       end,
     })
 
