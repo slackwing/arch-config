@@ -10,6 +10,8 @@
 !tmux/
 !my/
 !dailyglot/
+!waycounter/
+waycounter/state/
 !.claude/
 .claude/*
 !.claude/agents/

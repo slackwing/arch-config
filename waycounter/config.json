@@ -1,0 +1,7 @@
+{
+    "signal": 8,
+    "chips": [
+        { "step": 0.5, "tint": "#f9e2af" },
+        { "step": 0.5, "tint": "#f38ba8" }
+    ]
+}

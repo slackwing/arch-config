@@ -2,6 +2,9 @@
  * Bar is transparent; module groups float as rounded dark pills.
  * Palette: https://catppuccin.com/palette (mocha) */
 
+/* waycounter chips (~/src/waycounter) — generated per-chip tints */
+@import "waycounter.css";
+
 * {
     /* `otf-font-awesome` is required to be installed for icons */
     font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;
