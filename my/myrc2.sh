@@ -140,6 +140,7 @@ website_sync() {
             --filter='P .staging/' \
             --filter='P shared/assets/' \
             --filter='P **/wordpress/' \
+            --filter='P .well-known/' \
             --exclude-from "$excludes_file" \
             --itemize-changes \
             --protect-args \
