@@ -3,7 +3,7 @@
 {
     "group/waycounter": {
         "orientation": "inherit",
-        "modules": ["custom/waycounter-0", "custom/waycounter-1"]
+        "modules": ["custom/waycounter-0", "custom/waycounter-1", "custom/waycounter-2"]
     },
     "custom/waycounter-0": {
         "exec": "/home/slackwing/.local/bin/waycounter show 0",
@@ -31,6 +31,20 @@
         "menu-actions": {
             "dec": "/home/slackwing/.local/bin/waycounter dec 1",
             "reset": "/home/slackwing/.local/bin/waycounter reset 1"
+        }
+    },
+    "custom/waycounter-2": {
+        "exec": "/home/slackwing/.local/bin/waycounter show 2",
+        "interval": "once",
+        "signal": 8,
+        "exec-on-event": false,
+        "tooltip": false,
+        "on-click": "/home/slackwing/.local/bin/waycounter inc 2",
+        "menu": "on-click-right",
+        "menu-file": "/home/slackwing/.config/waycounter/menu.xml",
+        "menu-actions": {
+            "dec": "/home/slackwing/.local/bin/waycounter dec 2",
+            "reset": "/home/slackwing/.local/bin/waycounter reset 2"
         }
     }
 }
