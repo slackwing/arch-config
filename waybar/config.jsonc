@@ -23,12 +23,12 @@
         "custom/dailyglot-ja",
         "custom/dailyglot-ar",
         "custom/dailyglot-he",
-        "custom/dailyglot-ru"
+        "custom/dailyglot-ru",
+        "group/waycounter"
     ],
     // Counter chips (~/src/waycounter); modules defined in waycounter.jsonc
     "include": ["~/.config/waybar/waycounter.jsonc"],
     "modules-right": [
-        "group/waycounter",
         "custom/weather",
         "mpd",
         "group/env",

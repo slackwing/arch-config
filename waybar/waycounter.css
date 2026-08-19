@@ -7,6 +7,9 @@
     margin: 12px 3px 2px 3px;
     padding: 0 12px;
     min-width: 24px;
+    /* 28 + 2px borders = 30px, the height of the dailyglot pills; digits
+     * alone make a shorter line box than dailyglot's multi-script glyphs */
+    min-height: 28px;
     color: #f9e2af;
 }
 #custom-waycounter-1 {
@@ -16,5 +19,8 @@
     margin: 12px 3px 2px 3px;
     padding: 0 12px;
     min-width: 24px;
+    /* 28 + 2px borders = 30px, the height of the dailyglot pills; digits
+     * alone make a shorter line box than dailyglot's multi-script glyphs */
+    min-height: 28px;
     color: #f38ba8;
 }
