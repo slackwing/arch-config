@@ -65,6 +65,13 @@ directory has its own CLAUDE.md, defer to it.
 - Delete branches once merged to master; the branch list should mean
   "unmerged work".
 
+## UI writing (all projects)
+
+- NO verbose labels, hints, or explainer sentences in UIs. Real products
+  don't caption their affordances ("Drag to reorder — the top person's…").
+  If an affordance needs explaining, the design is wrong or the words
+  belong in a hover `title` tooltip. Buttons/labels: one or two words.
+
 ## Daily tools
 
 - `sxiva` — my CLI (built in `feathers/11.sxiv`) for daily minutes/points;
