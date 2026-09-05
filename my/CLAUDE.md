@@ -45,6 +45,16 @@ directory has its own CLAUDE.md, defer to it.
 - Per-project rules: check the project dir for CLAUDE.md (e.g.
   `feathers/11.sxiv`, `feathers/12.kaprekar`, `~/src/hobby-server`).
 
+## Shared website auth
+
+- All websites share ONE login system (one account per person,
+  per-website roles, `hobby_session` SSO cookie, invite/reset links),
+  served by `~/src/hobby-server` with its console at
+  andrewcheong.com/admin. New sites must use it — never roll
+  per-site auth. Full integration guide:
+  `~/src/hobby-server/docs/SHARED_AUTH.md`. (rv predates it and
+  still uses its own legacy login.)
+
 ## Web deployment
 
 - `feathers/foundry/website/html/` (alias `html` from feathers) mirrors
