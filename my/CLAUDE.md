@@ -44,6 +44,9 @@ directory has its own CLAUDE.md, defer to it.
   but old uncommitted work may still live there.
 - Per-project rules: check the project dir for CLAUDE.md (e.g.
   `feathers/11.sxiv`, `feathers/12.kaprekar`, `~/src/hobby-server`).
+- **Always commit AND push** after finishing work in `~/.config`,
+  `feathers`, `darkfeather`, `manuscript-studio`, `hobby-server`,
+  and `~/src/minutes` — don't ask, don't leave work unpushed.
 
 ## Shared website auth
 
