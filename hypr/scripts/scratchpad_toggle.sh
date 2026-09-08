@@ -205,14 +205,15 @@ launch_pad() {  # creates the pad window for $MODE/$SPECIAL, sets $addr
         # interactive zsh: Hyprland's env lacks SXIVA_DATA/EDITOR, and when
         # sxiva exits the pad stays a usable shell instead of closing.
         local cmd="alacritty"
-        # Telegram plugin is disabled globally (~/.claude/settings.json) so the
-        # four claude pads don't fight over the single bot token (only one
-        # getUpdates consumer is allowed per bot). ONLY the + pad (claude1)
-        # re-enables it via a per-launch --settings file, so Telegram reliably
-        # reaches that one session. Passed by PATH (not inline JSON) to avoid
-        # nested-quoting issues inside zsh -ic. --channels is also required:
-        # without it the CLI drops inbound channel notifications ("not in
-        # --channels list for this session") even though the plugin is loaded.
+        # Telegram plugin is disabled globally (~/.claude/settings.json);
+        # each claude pad re-enables it via its own --settings file
+        # (settings.telegram-padN.json), which also sets TELEGRAM_STATE_DIR
+        # to ~/.claude/channels/telegram-padN — one bot per pad, so the
+        # one-getUpdates-consumer-per-bot limit never bites. Settings passed
+        # by PATH (not inline JSON) to avoid nested-quoting issues inside
+        # zsh -ic. --channels is also required: without it the CLI drops
+        # inbound channel notifications ("not in --channels list for this
+        # session") even though the plugin is loaded.
         # Terminal and claude pads get per-pad dark background tints so
         # they're tellable at a glance (7 keeps the base black);
         # transparent_background_colors in alacritty.toml keeps every tint
@@ -224,11 +225,12 @@ launch_pad() {  # creates the pad window for $MODE/$SPECIAL, sets $addr
             9)       cmd="alacritty -o 'colors.primary.background=\"#262626\"'" ;;
             claude*)
                 case "$MODE" in
-                    claude1) tint="#0d2f1b"; flags=" --settings $HOME/.claude/settings.telegram-pad.json --channels plugin:telegram@claude-plugins-official" ;;
-                    claude2) tint="#331111"; flags="" ;;
-                    claude3) tint="#11203a"; flags="" ;;
-                    claude4) tint="#26123a"; flags="" ;;
+                    claude1) tint="#0d2f1b" ;;
+                    claude2) tint="#331111" ;;
+                    claude3) tint="#11203a" ;;
+                    claude4) tint="#26123a" ;;
                 esac
+                flags=" --settings $HOME/.claude/settings.telegram-pad${MODE#claude}.json --channels plugin:telegram@claude-plugins-official"
                 cmd="alacritty -o 'colors.primary.background=\"$tint\"' --working-directory $HOME/.config/my -e zsh -ic 'claude --dangerously-skip-permissions$flags; exec zsh'"
                 ;;
         esac
