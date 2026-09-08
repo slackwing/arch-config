@@ -231,7 +231,11 @@ launch_pad() {  # creates the pad window for $MODE/$SPECIAL, sets $addr
                     claude4) tint="#26123a" ;;
                 esac
                 flags=" --settings $HOME/.claude/settings.telegram-pad${MODE#claude}.json --channels plugin:telegram@claude-plugins-official"
-                cmd="alacritty -o 'colors.primary.background=\"$tint\"' --working-directory $HOME/.config/my -e zsh -ic 'claude --dangerously-skip-permissions$flags; exec zsh'"
+                # TELEGRAM_STATE_DIR must be real process env: the settings
+                # file's env block reaches shell tools but NOT the plugin MCP
+                # server, which spawns too early and falls back to the retired
+                # default dir.
+                cmd="alacritty -o 'colors.primary.background=\"$tint\"' --working-directory $HOME/.config/my -e zsh -ic 'TELEGRAM_STATE_DIR=$HOME/.claude/channels/telegram-pad${MODE#claude} claude --dangerously-skip-permissions$flags; exec zsh'"
                 ;;
         esac
         hyprctl dispatch exec "[float; workspace $SPECIAL silent] $cmd"
