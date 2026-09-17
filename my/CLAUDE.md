@@ -57,6 +57,12 @@ directory has its own CLAUDE.md, defer to it.
   per-site auth. Full integration guide:
   `~/src/hobby-server/docs/SHARED_AUTH.md`. (rv predates it and
   still uses its own legacy login.)
+- **Underscore convention**: files the shared system reaches into by
+  path live at the same place in every site and start with `_`:
+  `<site>/_invite/` (invite / set-password page) and `<site>/_email/`
+  (email templates + admin preview; the console sends them). Users
+  carry `initial`/`color` (avatar) and `email`, all admin-set. Sending
+  needs the `email:` SMTP block in the VM's hobby-server config.
 
 ## Web deployment
 
