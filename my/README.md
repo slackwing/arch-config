@@ -6,6 +6,10 @@ Symlink from ~/.local/bin/ to run manually.
 
 In Firefox go to about:support then open the Profile Directory, create or open a directory "chrome/", and symlink to this file.
 
+# claude-statusline.sh
+
+Claude Code status line (model · effort · est. $ · 5h/7d limits). Wire it on a new machine by adding to ~/.claude/settings.json (not in this repo): `"statusLine": {"type": "command", "command": "~/.config/my/claude-statusline.sh"}`. Every claude inherits it, including the numpad pads (their --settings files only override the keys they name).
+
 # Web Development Reorientation
 
 - ws_prod and ws_stag sync the feathers/.../html/ directory to the server's /var/www/html/{,.staging}/ respectively.
