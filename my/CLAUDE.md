@@ -98,12 +98,6 @@ directory has its own CLAUDE.md, defer to it.
   master (`git push origin <job>:master`), rsync from the worktree, and
   for hobby-server push to main and run the VM install. Then
   `deploy-lock.sh release`. Same for hobby-server (one lock covers both).
-- **Several Claudes at once** (common on hxh): develop in a worktree
-  (`git worktree add -b <job> ~/src/worktree-<job> origin/master`), and
-  take `flock -w 900 /tmp/claude-deploy.lock` around merge-to-master +
-  push + deploy only (write who/why to `/tmp/claude-deploy.lock.holder`
-  while holding it). Protocol: `/tmp/CLAUDE-LOCK-README.txt`. Fetch and
-  merge origin before taking the lock; deploy from the main checkout.
 
 ## UI writing (all projects)
 
