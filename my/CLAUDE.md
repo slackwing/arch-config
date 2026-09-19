@@ -86,6 +86,18 @@ directory has its own CLAUDE.md, defer to it.
   manuscript-studio pattern — see its CLAUDE.md.
 - Delete branches once merged to master; the branch list should mean
   "unmerged work".
+- **Two sessions, one master (2026-09-19, Andrew's ask):** when more than
+  one Claude works on the hxh site, each works in its OWN worktree
+  (`git worktree add -b <job> ~/src/worktree-<job> origin/master`) and
+  never edits the shared `~/src/feathers` checkout. Before merging or
+  deploying, take the shared lock: `~/.config/my/deploy-lock.sh wait
+  <session-name>` (a dir in /tmp; `status` shows who holds it). While
+  holding it: `git fetch`, rebase the branch on origin/master (rebuild
+  the committed hxh bundle with `npm run build` after any merge — never
+  resolve it by hand), `npm run check`, push the branch straight to
+  master (`git push origin <job>:master`), rsync from the worktree, and
+  for hobby-server push to main and run the VM install. Then
+  `deploy-lock.sh release`. Same for hobby-server (one lock covers both).
 - **Several Claudes at once** (common on hxh): develop in a worktree
   (`git worktree add -b <job> ~/src/worktree-<job> origin/master`), and
   take `flock -w 900 /tmp/claude-deploy.lock` around merge-to-master +
