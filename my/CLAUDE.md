@@ -68,6 +68,9 @@ directory has its own CLAUDE.md, defer to it.
 
 - `feathers/foundry/website/html/` (alias `html` from feathers) mirrors
   directly to my web server's `/var/www/html/` via rsync.
+- The hxh site is BUILT: `cd ~/src/feathers/foundry/website && npm run
+  check` (esbuild bundle + node/jsdom tests) before `ws_prod`; the
+  bundle `html/hxh/hxh.js` is committed. See `html/CLAUDE.md` there.
 - `ws_prod` (master branch only) syncs production; `ws_stag` syncs
   `.staging/`. Both DELETE what they don't find — the server is a mirror of
   the repo EXCEPT paths protected in rsync filters and
