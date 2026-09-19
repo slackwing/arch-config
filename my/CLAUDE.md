@@ -86,6 +86,12 @@ directory has its own CLAUDE.md, defer to it.
   manuscript-studio pattern — see its CLAUDE.md.
 - Delete branches once merged to master; the branch list should mean
   "unmerged work".
+- **Several Claudes at once** (common on hxh): develop in a worktree
+  (`git worktree add -b <job> ~/src/worktree-<job> origin/master`), and
+  take `flock -w 900 /tmp/claude-deploy.lock` around merge-to-master +
+  push + deploy only (write who/why to `/tmp/claude-deploy.lock.holder`
+  while holding it). Protocol: `/tmp/CLAUDE-LOCK-README.txt`. Fetch and
+  merge origin before taking the lock; deploy from the main checkout.
 
 ## UI writing (all projects)
 
