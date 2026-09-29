@@ -13,3 +13,6 @@ reference-materials/
 __pycache__/
 *.pyc
 .git/
+# project notes for Claude: internal (server access, routes, procedures) — never public (security review, 2026-09-28)
+CLAUDE.md
+AGENTS.md
