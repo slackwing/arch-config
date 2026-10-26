@@ -79,8 +79,9 @@ directory has its own CLAUDE.md, defer to it.
 - `ws_ssh` = SSH to the server (GCP, key `~/.ssh/id_ed25519_gcp_202512`).
   Run `ssha` first to load the key into the agent (needed before any
   server sync/SSH work in a fresh session).
-- Other syncs: `dashboard_sync` (sxiv dashboard), `wsj_prod`/`wsj_stag`
-  (journal). All defined in `myrc2.sh`.
+- Other syncs: `wsj_prod`/`wsj_stag` (journal), defined in `myrc2.sh`.
+  The status dashboard's API is hobby-server's `sxiva` project (no
+  separate deploy); its page ships with `ws_prod`.
 - `manuscript-studio` deploys via its `install.sh` from GitHub main
   (`cp_deploy` copies the one-liner). `hobby-server` mirrors the
   manuscript-studio pattern — see its CLAUDE.md.

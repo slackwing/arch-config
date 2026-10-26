@@ -150,24 +150,6 @@ website_sync() {
     fi
 }
 
-dashboard_sync() {
-    if currentDirIs "feathers"; then
-        rsync -av0c \
-            --delete \
-            --delete-delay \
-            --filter='P **/.env' \
-            --exclude='__pycache__' \
-            --exclude='*.pyc' \
-            --exclude='.git' \
-            --itemize-changes \
-            --protect-args \
-            11.sxiv/dashboard/ \
-            "acheong87@35.243.192.242:/var/www/dashboard/"
-    else
-        echo "Must be in feathers/ directory; currently in $PWD."
-    fi
-}
-
 # Convenience.
 
 alias ws_prod='website_sync . . master'
@@ -180,7 +162,6 @@ alias wsj_stag='website_sync journal/ .staging/journal/ ___journal'
 alias nosleep='systemd-inhibit --what=idle:sleep --why=nosleep'
 
 alias start_docker='sudo systemctl start docker'
-alias start_local='feathers ; cd 11.sxiv/dashboard/docker ; docker compose up -d'
 
 cp_deploy() {
     wl-copy <<'EOF'
