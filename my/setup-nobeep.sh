@@ -11,9 +11,12 @@
 # of desktop volume. So:
 #   1. Blacklist the pcspkr module (udev autoloads it from the PNP0800 id).
 #   2. Unload it now.
-#   3. Turn the codec's Beep switch off and its volume to 0 on every sound
+#   3. Turn the codec's Beep volume to 0 (and switch off) on every sound
 #      card that has one, then persist with alsactl store (alsa-restore
-#      replays /var/lib/alsa/asound.state at boot).
+#      replays /var/lib/alsa/asound.state at boot). On this Conexant SN6140
+#      the beep amp has no hardware mute (codec#0 node 0x12: mute=0), so the
+#      switch is cosmetic and volume 0 only attenuates by 28 dB — step 1 is
+#      the real fix; step 3 just makes any firmware-driven beep quieter.
 # If the machine still beeps after this, the sound comes from the embedded
 # controller's own buzzer and only the BIOS setup / TUXEDO support can help.
 set -euo pipefail
