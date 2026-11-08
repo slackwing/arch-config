@@ -16,6 +16,9 @@ directory has its own CLAUDE.md, defer to it.
   mouse-wake disabled, 40G /swapfile) is applied by `setup-power.sh` here —
   run once with sudo per machine; the resulting config lives outside the
   repo in `/etc`. User-side idle timeouts: `hypr/hypridle.conf`.
+- PC-speaker beep is silenced (pcspkr blacklisted, codec Beep switch off)
+  by `setup-nobeep.sh` here — run once with sudo per machine. Loud
+  high-pitched beeping after a wake from sleep was the symptom (2026-11).
 - `myrc2.sh` in this directory holds my aliases and functions and is the
   single best reference for how I do things (deploys, navigation, upgrades).
   Read it before inventing a procedure. `upgrade` = full system update.
