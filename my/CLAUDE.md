@@ -9,7 +9,10 @@ directory has its own CLAUDE.md, defer to it.
 ## The machine
 
 - Arch Linux + Hyprland. All config lives in `~/.config`, which is a git repo
-  (commit style: `feat(config): ...`, terse). Key spots: `hypr/hyprland.conf`
+  (commit style: `feat(config): ...`, terse). Key spots: `hypr/hyprland.lua`
+  (Lua config since 2026-11-09; Hyprland 0.57 drops the old `.conf` —
+  `hypr/hyprland.conf` is the legacy copy, delete once the Lua one has
+  survived a login; check edits with `Hyprland --verify-config -c <file>`)
   (+ `hypr/scripts/`), `waybar/`, `nvim/`, `tmux/`. Keyd remaps live outside
   the repo at `/etc/keyd/default.conf`.
 - Power policy (lid → suspend-then-hibernate, hibernate at 5% battery,
