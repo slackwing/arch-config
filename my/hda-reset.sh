@@ -24,7 +24,7 @@ show() {
 }
 echo "== before =="; show
 echo "== rebinding $DEV =="
-echo "$DEV" > "$DRV/unbind"; sleep 1
+[[ -e $DRV/$DEV ]] && { echo "$DEV" > "$DRV/unbind"; sleep 1; } || echo "(was not bound)"
 echo "$DEV" > "$DRV/bind"; sleep 3
 echo "== after =="; show
 journalctl -k --since "-15s" --no-pager -o short-iso | grep -iE "hda|codec|azx" | sed -E 's/^[^ ]+ [^ ]+ kernel: //' | tail -5
