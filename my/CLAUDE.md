@@ -16,9 +16,10 @@ directory has its own CLAUDE.md, defer to it.
   mouse-wake disabled, 40G /swapfile) is applied by `setup-power.sh` here —
   run once with sudo per machine; the resulting config lives outside the
   repo in `/etc`. User-side idle timeouts: `hypr/hypridle.conf`.
-- PC-speaker beep is silenced (pcspkr blacklisted, codec Beep switch off)
-  by `setup-nobeep.sh` here — run once with sudo per machine. Loud
-  high-pitched beeping after a wake from sleep was the symptom (2026-11).
+- Audio quirks (pcspkr blacklisted, codec Beep off, HDA power_save=0) are
+  applied by `setup-audio.sh` here — run once with sudo per machine. The
+  Conexant codec can hang (pops, then loud square-wave tones from the
+  speakers; phantom headphone icon): `sudo hda-reset.sh` resets it in place.
 - `myrc2.sh` in this directory holds my aliases and functions and is the
   single best reference for how I do things (deploys, navigation, upgrades).
   Read it before inventing a procedure. `upgrade` = full system update.
