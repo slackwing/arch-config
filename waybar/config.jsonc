@@ -12,7 +12,7 @@
     // otherwise shove the dailyglot pills flush against it)
     // Choose the order of the modules
     "modules-left": [
-        "hyprland/workspaces",
+        "ext/workspaces",
         "sway/mode",
         "sway/scratchpad",
         "custom/media"
@@ -102,21 +102,15 @@
         "exec-on-event": false,
         "on-click": "$HOME/.local/bin/dailyglot-popup ru"
     },
-    "hyprland/workspaces": {
-        "disable-scroll": true,
+    // ext/workspaces, not hyprland/workspaces: Waybar 0.15's hyprland module
+    // sends old-syntax "dispatch workspace N" over IPC, which Lua-config
+    // Hyprland rejects (clicks silently did nothing). Fixed upstream after
+    // 0.15.0 (Waybar PR #5013); either module is fine once that is packaged.
+    "ext/workspaces": {
+        "on-click": "activate",
         "all-outputs": false,
-        "warp-on-scroll": false,
-        "format": "    {name}    ",
-        "format-icons": {
-            "1": "",
-            "2": "",
-            "3": "",
-            "4": "",
-            "5": "",
-            "urgent": "",
-            "focused": "",
-            "default": ""
-        }
+        "disable-scroll": true,
+        "format": "    {name}    "
     },
     "keyboard-state": {
         "numlock": true,

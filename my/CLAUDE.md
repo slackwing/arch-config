@@ -23,6 +23,8 @@ directory has its own CLAUDE.md, defer to it.
   names per dispatcher are in Hyprland's
   `src/config/lua/bindings/LuaBindingsDispatchers.cpp` (the stubs only say
   `fun(...)`).
+  Waybar 0.15's `hyprland/workspaces` sends the old form over IPC too, so
+  `waybar/config.jsonc` uses `ext/workspaces` (fixed upstream after 0.15.0).
 - Power policy (lid → suspend-then-hibernate, hibernate at 5% battery,
   mouse-wake disabled, 40G /swapfile) is applied by `setup-power.sh` here —
   run once with sudo per machine; the resulting config lives outside the
@@ -31,6 +33,9 @@ directory has its own CLAUDE.md, defer to it.
   applied by `setup-audio.sh` here — run once with sudo per machine. The
   Conexant codec can hang (pops, then loud square-wave tones from the
   speakers; phantom headphone icon): `sudo hda-reset.sh` resets it in place.
+- BIOS updates reset the EC's Fn lock (N.1.22A24 on 2026-11-11 turned the
+  F-row back into plain F-keys). Fn+Esc toggles it, or
+  `echo 1 | sudo tee /sys/devices/platform/tuxedo_keyboard/fn_lock`.
 - `myrc2.sh` in this directory holds my aliases and functions and is the
   single best reference for how I do things (deploys, navigation, upgrades).
   Read it before inventing a procedure. `upgrade` = full system update.
