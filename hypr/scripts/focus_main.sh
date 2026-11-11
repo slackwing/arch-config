@@ -17,7 +17,7 @@ CURRENT=$(hyprctl activewindow -j | jq -r '.address')
 if [[ "$CURRENT" == "$THIS_TAG" ]]; then
     if [[ -f "$PREV_FILE" ]]; then
         PREV_TAG=$(cat "$PREV_FILE")
-        hyprctl dispatch focuswindow address:$PREV_TAG
+        hyprctl dispatch "hl.dsp.focus({ window = \"address:$PREV_TAG\" })"
     fi
 else
     # If we're on another window -> store PREV and jump to THIS_TAG
@@ -25,5 +25,5 @@ else
         echo "$CURRENT" >"$PREV_FILE"
         notify-send "SET PREV FILE TO " "$CURRENT"
     fi
-    hyprctl dispatch focuswindow address:$THIS_TAG
+    hyprctl dispatch "hl.dsp.focus({ window = \"address:$THIS_TAG\" })"
 fi

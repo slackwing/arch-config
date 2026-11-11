@@ -15,6 +15,14 @@ directory has its own CLAUDE.md, defer to it.
   survived a login; check edits with `Hyprland --verify-config -c <file>`)
   (+ `hypr/scripts/`), `waybar/`, `nvim/`, `tmux/`. Keyd remaps live outside
   the repo at `/etc/keyd/default.conf`.
+- Hyprland Lua config gotcha: `hyprctl dispatch` now takes a Lua dispatcher
+  expression (`hyprctl dispatch 'hl.dsp.exec_cmd("foo")'`), NOT the old
+  `dispatch exec foo` form, and `hyprctl keyword` is gone (`hyprctl eval`).
+  Scripts under `hypr/scripts/` go through `hl_dispatch` in
+  `scratchpad_toggle.sh` (one `hyprctl eval`, pcall'd `hl.dispatch`s); option
+  names per dispatcher are in Hyprland's
+  `src/config/lua/bindings/LuaBindingsDispatchers.cpp` (the stubs only say
+  `fun(...)`).
 - Power policy (lid → suspend-then-hibernate, hibernate at 5% battery,
   mouse-wake disabled, 40G /swapfile) is applied by `setup-power.sh` here —
   run once with sudo per machine; the resulting config lives outside the

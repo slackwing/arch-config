@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Numpad scratchpads (numlock off). Each pad is "whichever window lives in
 # special:S-<name>"; Hyprland's native special-workspace toggle fades it
-# in/out (see the specialWorkspace animation + windowrules in hyprland.conf).
+# in/out (see the specialWorkspace animation + window rules in hyprland.lua).
 #   1/2/3  -> firefox windows (main profile)   [KP_End/KP_Down/KP_Next]
 #   5      -> terminal running sxiva           [KP_Begin]
 #   7/8/9  -> plain terminals                  [KP_Home/KP_Up/KP_Prior]
@@ -21,12 +21,39 @@
 # home tile instead of just closing the overlay. "." again re-tiles it to
 # wherever you are now; "." while on its home workspace un-adopts it back to
 # a pure scratchpad.
+#
+# Dispatching: with the Lua config (hyprland.lua, Hyprland 0.55+)
+# `hyprctl dispatch` takes a Lua dispatcher expression (hl.dsp.*) instead of
+# the old "<name> <args>" form, and `hyprctl keyword` is gone (use
+# `hyprctl eval`). Every dispatch here goes through hl_dispatch: one
+# `hyprctl eval` per call (one IPC round trip, like the old --batch), each
+# dispatcher pcall'd so one failure doesn't skip the rest.
 
 MODE="${1:-1}"
 LAST_FILE="$XDG_RUNTIME_DIR/hypr_scratchpad_last"
 STATE="$XDG_RUNTIME_DIR/hypr_scratchpad_fs_restore"
 HOLD_US=300000
 URL="https://claude.ai/new"
+
+hl_dispatch() {  # hl_dispatch <lua dispatcher expr>...
+    local code='local e = {} local function d(x) local ok, err = pcall(hl.dispatch, x) if not ok then e[#e+1] = tostring(err) end end '
+    local x out
+    for x in "$@"; do code+="d($x) "; done
+    code+='if #e > 0 then error(table.concat(e, " | ")) end'
+    out=$(hyprctl eval "$code")
+    [[ "$out" == ok* ]] || echo "scratchpad_toggle: $out" >&2
+}
+win()  { printf '"address:%s"' "$1"; }   # window selector for hl.dsp.*
+lstr() { printf '[==[%s]==]' "$1"; }     # Lua long string: no escaping needed
+# Old dispatcher -> Lua dispatcher expression:
+d_move_ws()   { echo "hl.dsp.window.move({ workspace = \"$1\", follow = false, window = $(win "$2") })"; }  # movetoworkspacesilent
+d_float()     { echo "hl.dsp.window.float({ action = \"enable\", window = $(win "$1") })"; }                # setfloating
+d_tiled()     { echo "hl.dsp.window.float({ action = \"disable\", window = $(win "$1") })"; }               # settiled
+d_resize()    { echo "hl.dsp.window.resize({ x = $1, y = $2, window = $(win "$3") })"; }                   # resizewindowpixel exact
+d_move_px()   { echo "hl.dsp.window.move({ x = $1, y = $2, window = $(win "$3") })"; }                     # movewindowpixel exact
+d_focus_win() { echo "hl.dsp.focus({ window = $(win "$1") })"; }                                           # focuswindow
+d_focus_mon() { echo "hl.dsp.focus({ monitor = \"$1\" })"; }                                               # focusmonitor
+d_toggle()    { echo "hl.dsp.workspace.toggle_special(\"${SPECIAL#special:}\")"; }                         # togglespecialworkspace
 
 resolve_special() {
     case "$1" in
@@ -62,6 +89,18 @@ is_visible() {
         '[.[] | select(.specialWorkspace.name == $ws)] | length') > 0 ))
 }
 
+# Pad geometry on the focused monitor: 80% of it, centered in the area
+# below waybar. Sets tw th (size) and tx ty (position).
+pad_geom() {
+    local mx my mw mh rl rt rr rb
+    read -r mx my mw mh rl rt rr rb < <(hyprctl monitors -j | jq -r \
+        '.[] | select(.focused) | "\(.x) \(.y) \(.width) \(.height) \(.reserved[0]) \(.reserved[1]) \(.reserved[2]) \(.reserved[3])"')
+    tw=$(( mw * 80 / 100 ))
+    th=$(( mh * 80 / 100 ))
+    tx=$(( mx + rl + (mw - rl - rr - tw) / 2 ))
+    ty=$(( my + rt + (mh - rt - rb - th) / 2 ))
+}
+
 # Capture any fullscreen window on the current workspace BEFORE creating or
 # revealing anything — both a newly created window and the special-workspace
 # overlay can cancel fullscreen, and we want the pre-existing state.
@@ -95,8 +134,7 @@ return_other_adopted() {
     read -r _ hws < "$hf"
     oaddr=$(hyprctl clients -j | jq -r --arg ws "$ws" \
         '[.[] | select(.workspace.name == $ws)][0].address // empty')
-    [[ -n "$oaddr" && -n "$hws" ]] && hyprctl --batch \
-        "dispatch movetoworkspacesilent $hws,address:$oaddr ; dispatch settiled address:$oaddr"
+    [[ -n "$oaddr" && -n "$hws" ]] && hl_dispatch "$(d_move_ws "$hws" "$oaddr")" "$(d_tiled "$oaddr")"
 }
 
 do_show() {  # needs $addr set and capture_fs done
@@ -109,7 +147,7 @@ do_show() {  # needs $addr set and capture_fs done
     # Adopted pad currently tiled on a real workspace: pull it back into the
     # (hidden) special workspace first, so the float/resize/center below stay
     # invisible, and re-record its home so do_hide returns it where it was.
-    local pre=""
+    local pre=()
     if [[ -f "$HOME_FILE" ]]; then
         local hws
         hws=$(hyprctl clients -j | jq -r --arg a "$addr" \
@@ -119,33 +157,29 @@ do_show() {  # needs $addr set and capture_fs done
                else "name:" + .name end')
         if [[ -n "$hws" ]]; then
             echo "$addr $hws" > "$HOME_FILE"
-            pre="dispatch movetoworkspacesilent $SPECIAL,address:$addr ; dispatch setfloating address:$addr ; "
+            pre=( "$(d_move_ws "$SPECIAL" "$addr")" "$(d_float "$addr")" )
         fi
     fi
     # Pre-size and pre-center on the focused monitor while still hidden, so
     # the reveal is a pure fade — no cross-monitor travel, no re-centering
-    # after the fact. 80% of monitor, centered in the area below waybar.
-    local mx my mw mh rl rt rr rb tw th
-    read -r mx my mw mh rl rt rr rb < <(hyprctl monitors -j | jq -r \
-        '.[] | select(.focused) | "\(.x) \(.y) \(.width) \(.height) \(.reserved[0]) \(.reserved[1]) \(.reserved[2]) \(.reserved[3])"')
-    tw=$(( mw * 80 / 100 ))
-    th=$(( mh * 80 / 100 ))
-    hyprctl --batch "${pre}dispatch resizewindowpixel exact $tw $th,address:$addr ; dispatch movewindowpixel exact $(( mx + rl + (mw - rl - rr - tw) / 2 )) $(( my + rt + (mh - rt - rb - th) / 2 )),address:$addr"
-    hyprctl --batch "dispatch togglespecialworkspace ${SPECIAL#special:} ; dispatch focuswindow address:$addr"
+    # after the fact.
+    pad_geom
+    hl_dispatch "${pre[@]}" "$(d_resize "$tw" "$th" "$addr")" "$(d_move_px "$tx" "$ty" "$addr")"
+    hl_dispatch "$(d_toggle)" "$(d_focus_win "$addr")"
 }
 
 close_overlay() {
-    # togglespecialworkspace acts on the FOCUSED monitor: if the pad is
-    # showing on a different monitor, a bare toggle would summon it there
-    # instead of closing it. Close it on the monitor that's showing it.
+    # toggle_special acts on the FOCUSED monitor: if the pad is showing on a
+    # different monitor, a bare toggle would summon it there instead of
+    # closing it. Close it on the monitor that's showing it.
     local pad_mon cur_mon
     pad_mon=$(hyprctl monitors -j | jq -r --arg ws "$SPECIAL" \
         '.[] | select(.specialWorkspace.name == $ws) | .name' | head -1)
     cur_mon=$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .name')
     if [[ -n "$pad_mon" && "$pad_mon" != "$cur_mon" ]]; then
-        hyprctl --batch "dispatch focusmonitor $pad_mon ; dispatch togglespecialworkspace ${SPECIAL#special:} ; dispatch focusmonitor $cur_mon"
+        hl_dispatch "$(d_focus_mon "$pad_mon")" "$(d_toggle)" "$(d_focus_mon "$cur_mon")"
     else
-        hyprctl dispatch togglespecialworkspace "${SPECIAL#special:}"
+        hl_dispatch "$(d_toggle)"
     fi
 }
 
@@ -157,8 +191,7 @@ do_hide() {
         local hws haddr
         read -r _ hws < "$HOME_FILE"
         haddr=$(find_addr)
-        [[ -n "$haddr" && -n "$hws" ]] && hyprctl --batch \
-            "dispatch movetoworkspacesilent $hws,address:$haddr ; dispatch settiled address:$haddr"
+        [[ -n "$haddr" && -n "$hws" ]] && hl_dispatch "$(d_move_ws "$hws" "$haddr")" "$(d_tiled "$haddr")"
         is_visible && close_overlay
     else
         close_overlay
@@ -168,20 +201,23 @@ do_hide() {
     if [[ -f "$STATE" ]]; then
         read -r fs_addr fs_mode < "$STATE"
         rm -f "$STATE"
-        local cur active
-        cur=$(hyprctl clients -j | jq -r --arg a "$fs_addr" \
-            '.[] | select(.address == $a) | .fullscreen')
+        local cur cur_client active
+        read -r cur cur_client < <(hyprctl clients -j | jq -r --arg a "$fs_addr" \
+            '.[] | select(.address == $a) | "\(.fullscreen) \(.fullscreenClient)"')
         active=$(hyprctl activewindow -j | jq -r '.address // ""')
         # Only restore when focus came back to the window we un-fullscreened
         # (keybind dismiss). If the user clicked a different window (unfocus
         # hide), don't steal their focus just to re-fullscreen it.
+        # Restores the internal mode and keeps the client mode as it is now
+        # (what the old `fullscreenstate <mode> -1` did).
         if [[ "$cur" == "0" && "$active" == "$fs_addr" ]]; then
-            hyprctl dispatch fullscreenstate "$fs_mode" -1
+            hl_dispatch "hl.dsp.window.fullscreen_state({ internal = $fs_mode, client = ${cur_client:-0}, action = \"set\", window = $(win "$fs_addr") })"
         fi
     fi
 }
 
 launch_pad() {  # creates the pad window for $MODE/$SPECIAL, sets $addr
+    pad_geom
     if [[ "$MODE" == [123] ]]; then
         # Firefox: exec window-rules can't target the new window (firefox
         # forwards to the running process, so the spawned PID never owns it)
@@ -189,7 +225,7 @@ launch_pad() {  # creates the pad window for $MODE/$SPECIAL, sets $addr
         local before
         before=$(hyprctl clients -j | jq -r \
             '[.[] | select(.class == "firefox") | .address] | @json')
-        hyprctl dispatch exec "firefox --new-window $URL"
+        hl_dispatch "hl.dsp.exec_cmd($(lstr "firefox --new-window $URL"))"
         addr=""
         for _ in $(seq 1 50); do
             addr=$(hyprctl clients -j | jq -r --argjson b "$before" \
@@ -198,7 +234,7 @@ launch_pad() {  # creates the pad window for $MODE/$SPECIAL, sets $addr
             sleep 0.1
         done
         [[ -z "$addr" ]] && exit 1
-        hyprctl --batch "dispatch setfloating address:$addr ; dispatch resizewindowpixel exact 80% 80%,address:$addr ; dispatch movetoworkspacesilent $SPECIAL,address:$addr"
+        hl_dispatch "$(d_float "$addr")" "$(d_resize "$tw" "$th" "$addr")" "$(d_move_ws "$SPECIAL" "$addr")"
     else
         # Terminals own their window PID, so exec rules place them directly
         # in the (hidden) special workspace — no flash. Pad 5 goes through an
@@ -238,16 +274,16 @@ launch_pad() {  # creates the pad window for $MODE/$SPECIAL, sets $addr
                 cmd="alacritty -o 'colors.primary.background=\"$tint\"' --working-directory $HOME/.config/my -e zsh -ic 'TELEGRAM_STATE_DIR=$HOME/.claude/channels/telegram-pad${MODE#claude} claude --dangerously-skip-permissions$flags; exec zsh'"
                 ;;
         esac
-        hyprctl dispatch exec "[float; workspace $SPECIAL silent] $cmd"
+        # Exec rules as a table (old: "[float; workspace $SPECIAL silent] $cmd").
+        hl_dispatch "hl.dsp.exec_cmd($(lstr "$cmd"), { float = true, workspace = \"$SPECIAL silent\" })"
         for _ in $(seq 1 50); do
             addr=$(find_addr)
             [[ -n "$addr" ]] && break
             sleep 0.1
         done
         [[ -z "$addr" ]] && exit 1
-        # exec-rule size percentages are unreliable; size explicitly to
-        # match the browser pads.
-        hyprctl dispatch resizewindowpixel "exact 80% 80%,address:$addr"
+        # Size explicitly to match the browser pads.
+        hl_dispatch "$(d_resize "$tw" "$th" "$addr")"
     fi
 }
 
@@ -310,16 +346,16 @@ case "$MODE" in
             # are tiling, not dismissing, so drop any pending fullscreen
             # restore — re-fullscreening would just cover the new tile.
             rm -f "$STATE"
-            hyprctl --batch "dispatch movetoworkspacesilent $aws,address:$addr ; dispatch settiled address:$addr ; dispatch focuswindow address:$addr"
+            hl_dispatch "$(d_move_ws "$aws" "$addr")" "$(d_tiled "$addr")" "$(d_focus_win "$addr")"
             is_visible && close_overlay
             echo "$addr $aws" > "$HOME_FILE"
         elif [[ "$wsid" == "$awsid" ]]; then
             # Already tiled on this workspace -> un-adopt.
-            hyprctl --batch "dispatch movetoworkspacesilent $SPECIAL,address:$addr ; dispatch setfloating address:$addr"
+            hl_dispatch "$(d_move_ws "$SPECIAL" "$addr")" "$(d_float "$addr")"
             rm -f "$HOME_FILE"
         else
             # Tiled on some other workspace -> bring its home here.
-            hyprctl --batch "dispatch movetoworkspacesilent $aws,address:$addr ; dispatch settiled address:$addr ; dispatch focuswindow address:$addr"
+            hl_dispatch "$(d_move_ws "$aws" "$addr")" "$(d_tiled "$addr")" "$(d_focus_win "$addr")"
             echo "$addr $aws" > "$HOME_FILE"
         fi
         exit 0

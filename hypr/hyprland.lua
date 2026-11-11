@@ -2,6 +2,9 @@
 -- Hyprland 0.55+ reads hyprland.lua, 0.57 drops the .conf format.
 -- API: /usr/share/hypr/stubs/hl.meta.lua, example /usr/share/hypr/hyprland.lua.
 -- Check without restarting: Hyprland --verify-config -c ~/.config/hypr/hyprland.lua
+-- hyprctl changed with it: `hyprctl dispatch` takes Lua (hl.dsp.*, e.g.
+-- hyprctl dispatch 'hl.dsp.exec_cmd("foo")'), `hyprctl keyword` is gone
+-- (use `hyprctl eval`). Scripts: see hl_dispatch in scripts/scratchpad_toggle.sh.
 
 
 ------------------
