@@ -13,14 +13,17 @@
 
 hl.monitor({ output = "",      mode = "preferred", position = "auto",       scale = "auto" })
 hl.monitor({ output = "eDP-1", mode = "preferred", position = "0x0",        scale = 1 })
-hl.monitor({ output = "DP-2",  mode = "preferred", position = "2000x-2160", scale = 1 })
+-- External monitor by description, not connector: it is DP-2 on the back
+-- USB4 port and DP-1 on the left USB-C port, and should behave the same on both.
+local external = "desc:Samsung Electric Company U32R59x HNMNA02466"
+hl.monitor({ output = external, mode = "preferred", position = "2000x-2160", scale = 1 })
 
 -- Laptop panel: workspaces 1-4 (master on the left); external: 5-9 (centered).
 for i = 1, 4 do
     hl.workspace_rule({ workspace = tostring(i), monitor = "eDP-1", layout_opts = { orientation = "left" } })
 end
 for i = 5, 9 do
-    hl.workspace_rule({ workspace = tostring(i), monitor = "DP-2", layout_opts = { orientation = "center" } })
+    hl.workspace_rule({ workspace = tostring(i), monitor = external, layout_opts = { orientation = "center" } })
 end
 
 
