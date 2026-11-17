@@ -55,8 +55,8 @@ directory has its own CLAUDE.md, defer to it.
   `12.kaprekar`, `16.the-wildfire`). After `19` comes `1a`, not `20`.
   (`0g` is a one-off misnumbering, grandfathered in — treat it as sitting
   between `0f` and `10`; don't imitate it.) To find the next free number,
-  list BOTH directories and take the highest allocated + 1; as of 2026-07
-  that is `17` (darkfeather's wildfire took 16).
+  list BOTH directories and take the highest allocated + 1; as of 2026-11
+  that is `1a` (darkfeather's distillery took 19).
 - Major projects graduate to their own repo under `~/src/<name>` (e.g.
   `manuscript-studio`, `hobby-server`) instead of a feathers number.
 - `$SRC/worktree-<name>` checkouts (`worktree <name>` navigates, `worktrees`
