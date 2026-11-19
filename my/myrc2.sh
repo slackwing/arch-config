@@ -48,6 +48,7 @@ alias wildfire='cd ~/src/darkfeather/16.the-wildfire/ && git pull'
 
 alias claude_dsp='claude --dangerously-skip-permissions'
 alias claude_tele='claude --dangerously-skip-permissions --channels plugin:telegram@claude-plugins-official'
+alias upgrade_claude='yay -S claude-code'
 
 # Git
 
