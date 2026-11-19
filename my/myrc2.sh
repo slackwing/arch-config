@@ -47,6 +47,9 @@ alias wildfire='cd ~/src/darkfeather/16.the-wildfire/ && git pull'
 # Claude
 
 alias claude_dsp='claude --dangerously-skip-permissions'
+cc() { # hub Claude from ~/.config/my; subshell so the caller's cwd is kept
+    (cd ~/.config/my && claude --dangerously-skip-permissions "$@")
+}
 alias claude_tele='claude --dangerously-skip-permissions --channels plugin:telegram@claude-plugins-official'
 alias upgrade_claude='yay -S claude-code'
 
