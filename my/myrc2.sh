@@ -1,11 +1,10 @@
 export EDITOR="nvim"
 export SXIVA_DATA="$HOME/src/minutes/data/"
 
-alias upgrade='update_pacman && system_update'
+alias upgrade='mirror_update && update_pacman && system_update'
 alias system_update='yay -Syu'
 alias update_pacman='sudo pacman -Syy'
-# already done in update_pacman
-# alias mirror_update='sudo reflector --latest 20 --verbose --protocol https --sort rate --save /etc/pacman.d/mirrorlist'
+alias mirror_update='sudo reflector --latest 20 --verbose --protocol https --sort rate --save /etc/pacman.d/mirrorlist'
 
 alias h='history'
 alias hc='nvim ~/.config/hypr/hyprland.conf'
