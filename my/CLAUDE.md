@@ -56,7 +56,7 @@ directory has its own CLAUDE.md, defer to it.
   (`0g` is a one-off misnumbering, grandfathered in — treat it as sitting
   between `0f` and `10`; don't imitate it.) To find the next free number,
   list BOTH directories and take the highest allocated + 1; as of 2026-11
-  that is `1a` (darkfeather's distillery took 19).
+  that is `1b` (feathers' ig-convo-downloader took 1a).
 - Major projects graduate to their own repo under `~/src/<name>` (e.g.
   `manuscript-studio`, `hobby-server`) instead of a feathers number.
 - `$SRC/worktree-<name>` checkouts (`worktree <name>` navigates, `worktrees`
