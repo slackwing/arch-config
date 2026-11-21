@@ -4,14 +4,16 @@
 # alternates the displayed unit, so it cycles C/F without re-fetching.
 
 ZIP=11206
+# Bare "11206" geocodes to Algeciras, Spain (same postal code); pin the country.
+LOC="$ZIP,US"
 CACHE="${XDG_RUNTIME_DIR:-/tmp}/waybar_weather_$ZIP"
 MAX_AGE=300
 
 now=$(date +%s)
 if [[ ! -f "$CACHE" ]] || (( now - $(stat -c %Y "$CACHE") > MAX_AGE )); then
     # wttr.in prefixes an explicit sign; drop the "+", keep "-" for below zero.
-    c=$(curl -sf --max-time 5 "wttr.in/$ZIP?m&format=%c%t" | tr -d '+')
-    f=$(curl -sf --max-time 5 "wttr.in/$ZIP?u&format=%c%t" | tr -d '+')
+    c=$(curl -sf --max-time 5 "wttr.in/$LOC?m&format=%c%t" | tr -d '+')
+    f=$(curl -sf --max-time 5 "wttr.in/$LOC?u&format=%c%t" | tr -d '+')
     # Only overwrite on success so a flaky fetch keeps showing stale data.
     if [[ -n "$c" && -n "$f" ]]; then
         printf '%s\n%s\n' "$c" "$f" > "$CACHE.tmp" && mv "$CACHE.tmp" "$CACHE"
