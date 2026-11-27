@@ -6,6 +6,7 @@
 #   5      -> terminal running sxiva           [KP_Begin]
 #   7/8/9  -> plain terminals                  [KP_Home/KP_Up/KP_Prior]
 #   claude1..4 -> claude in ~/.config/my       [KP_Add/KP_Subtract/KP_Multiply/KP_Divide]
+#   claude5/6  -> claude in ~/.config/my       [Home/End: keyd emits F13/F14 for them]
 #   last   -> whichever pad was used last      [KP_Insert / 0]
 #
 # Every pad key is bound as "press <pad>" (bind) + "release <pad>" (bindr):
@@ -60,7 +61,7 @@ resolve_special() {
         1|2|3)      SPECIAL="special:S-browser$1" ;;
         5)          SPECIAL="special:S-sxiva" ;;
         7|8|9)      SPECIAL="special:S-term$1" ;;
-        claude[1-4]) SPECIAL="special:S-$1" ;;
+        claude[1-6]) SPECIAL="special:S-$1" ;;
         *)          exit 1 ;;
     esac
     # Presence of HOME_FILE = pad is adopted (lives tiled on a real
@@ -265,8 +266,15 @@ launch_pad() {  # creates the pad window for $MODE/$SPECIAL, sets $addr
                     claude2) tint="#331111" ;;
                     claude3) tint="#11203a" ;;
                     claude4) tint="#26123a" ;;
+                    claude5) tint="#36383c" ;;  # grey (Home)
+                    claude6) tint="#3d3009" ;;  # gold (End)
                 esac
-                flags=" --settings $HOME/.claude/settings.telegram-pad${MODE#claude}.json --channels plugin:telegram@claude-plugins-official"
+                # Telegram only once the pad's bot token exists, so a new
+                # pad launches clean (no failed-MCP noise) until its bot
+                # is created and the token lands in telegram-padN/.env.
+                flags=""
+                [[ -f "$HOME/.claude/channels/telegram-pad${MODE#claude}/.env" ]] &&
+                    flags=" --settings $HOME/.claude/settings.telegram-pad${MODE#claude}.json --channels plugin:telegram@claude-plugins-official"
                 # TELEGRAM_STATE_DIR must be real process env: the settings
                 # file's env block reaches shell tools but NOT the plugin MCP
                 # server, which spawns too early and falls back to the retired

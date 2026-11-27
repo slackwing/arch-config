@@ -14,7 +14,10 @@ directory has its own CLAUDE.md, defer to it.
   `hypr/hyprland.conf` is the legacy copy, delete once the Lua one has
   survived a login; check edits with `Hyprland --verify-config -c <file>`)
   (+ `hypr/scripts/`), `waybar/`, `nvim/`, `tmux/`. Keyd remaps live outside
-  the repo at `/etc/keyd/default.conf`.
+  the repo at `/etc/keyd/default.conf` (its `[alt]` layer makes Alt+G/Alt+;
+  emit real Home/End, so the physical Home/End keys are remapped there to
+  F13/F14 = xkb `XF86Tools`/`XF86Launch5`, which Hyprland binds as claude
+  pads 5/6 — never bind bare Home/End in Hyprland).
 - Hyprland Lua config gotcha: `hyprctl dispatch` now takes a Lua dispatcher
   expression (`hyprctl dispatch 'hl.dsp.exec_cmd("foo")'`), NOT the old
   `dispatch exec foo` form, and `hyprctl keyword` is gone (`hyprctl eval`).
@@ -33,8 +36,11 @@ directory has its own CLAUDE.md, defer to it.
   applied by `setup-audio.sh` here — run once with sudo per machine. The
   Conexant codec can hang (pops, then loud square-wave tones from the
   speakers; phantom headphone icon): `sudo hda-reset.sh` resets it in place.
-- BIOS updates reset the EC's Fn lock (N.1.22A24 on 2026-11-11 turned the
-  F-row back into plain F-keys). Fn+Esc toggles it, or
+- The EC forgets Fn lock (a BIOS update reset it on 2026-11-11; it was off
+  again by 2026-11-27 after only s2idle suspends, so sleep clears it too).
+  `setup-fnlock.sh` here (run once with sudo per machine) installs
+  `tuxedo-fn-lock.service`, which writes `fn_lock=1` at boot and after
+  every resume. By hand: Fn+Esc, or
   `echo 1 | sudo tee /sys/devices/platform/tuxedo_keyboard/fn_lock`.
 - `myrc2.sh` in this directory holds my aliases and functions and is the
   single best reference for how I do things (deploys, navigation, upgrades).

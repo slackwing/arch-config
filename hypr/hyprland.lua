@@ -265,7 +265,10 @@ hl.bind("ALT + M", exec(scripts .. "/focus_main.sh"))
 -- Numpad scratchpads (numlock off), via scratchpad_toggle.sh:
 -- 1/2/3 firefox (main profile), 5 sxiva terminal, 7/8/9 terminals,
 -- + - * / claude pads (each starting in ~/.config/my), 0 the last-used
--- pad. Every key is dual-function: tap = toggle, hold >=300ms = peek
+-- pad. Home/End are claude pads 5/6 (grey/gold): keyd remaps the
+-- physical keys to F13/F14 (XF86Tools/XF86Launch5 under xkb) because its
+-- Alt+G / Alt+; layer emits real Home/End, which a bare Home/End bind
+-- here would swallow. Every key is dual-function: tap = toggle, hold >=300ms = peek
 -- (shows on keydown, hides on keyup). Needs a press + release bind per key:
 -- press shows/hides, release hides only after a long press.
 -- . tiles the visible (else last-used) pad onto the current workspace;
@@ -285,6 +288,8 @@ local padKeys = {
     { "KP_Subtract", "claude2" },
     { "KP_Multiply", "claude3" },
     { "KP_Divide",   "claude4" },
+    { "XF86Tools",   "claude5" },  -- F13 = physical Home (keyd)
+    { "XF86Launch5", "claude6" },  -- F14 = physical End (keyd)
 }
 for _, kp in ipairs(padKeys) do
     local key, name = kp[1], kp[2]
@@ -328,7 +333,7 @@ hl.window_rule({
 -- during the reveal; the specialWorkspace fade is workspace-level and still
 -- runs). Browsers are borderless; terminals keep their border.
 local pads = { "browser1", "browser2", "browser3", "sxiva", "term7", "term8", "term9",
-               "claude1", "claude2", "claude3", "claude4" }
+               "claude1", "claude2", "claude3", "claude4", "claude5", "claude6" }
 for _, p in ipairs(pads) do
     local rule = {
         name    = "pad-" .. p,
